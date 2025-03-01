@@ -1,0 +1,7 @@
+.vendor-list{
+    padding: 30px 20px ;
+    border: 1px solid #ccc;
+    margin: 30px;
+    height: 100%;
+    overflow-y: scroll;
+}

@@ -1,0 +1,16 @@
+.closed-request-div{
+    padding: 30px 20px ;
+    border: 1px solid #ccc;
+    margin: 30px;
+    height: 100%;
+    overflow-y: scroll;
+}
+.closed-status{
+    color: red;
+    background-color: rgb(238, 180, 180);
+    border: 1px solid red;
+    width: fit-content;
+    padding: 1px 8px;
+    border-radius: 5px;
+    text-align: center;
+}

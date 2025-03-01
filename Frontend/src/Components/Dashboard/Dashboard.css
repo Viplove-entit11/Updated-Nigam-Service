@@ -1,0 +1,45 @@
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+    gap: 10px;
+    /* border: 1px solid ; */
+    padding: 40px 10px ;
+}
+.div1, .div2, .div3, .div4 {
+    border: 1px solid #ccc;
+    border-radius: 5px ;
+    padding: 15px;
+    grid-row: span 2 / span 2;
+    /* display: flex; */
+
+}
+.div-text{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 25px;
+    font-weight: 500;
+    color: grey;
+}
+.div-value {
+    font-size: 3em;
+    font-weight: bold;
+}
+.div-link a
+{
+font-weight: 500;
+}
+.vendor-icon{
+    color: rgb(43, 107, 180);
+}
+.total-request-icon{
+    color: orangered;
+}
+.confirm-request-icon{
+    color: green;
+}
+.closed-request-icon{
+    color: rgb(41, 18, 77);
+}

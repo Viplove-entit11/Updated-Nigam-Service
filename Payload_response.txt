@@ -1,0 +1,112 @@
+API - http://localhost:8081/send-otp   (POST)
+payload:
+{
+    "username":"viplove",
+    "mobile":"9179518690"
+}
+response:
+{
+    "message": "OTP sent and user updated",
+    "otp": 4369,
+    "userId": 1,
+    "username": "viplove",
+    "response": {
+        "result": "success",
+        "message": "SMS SUBMITTED SUCCESSFULLY",
+        "sms_shoot_id": "entit67c161ac1491b"
+    }
+}
+
+---------------------------------------------------------------
+
+API - http://localhost:8081/register_vendor (POST)
+payload:
+{
+     "vendor_name": "shalin",
+      "vendorCharges": "1000",
+      "vendorContact": "9454343535"
+}
+response:
+{
+    "message": "Vendor registered successfully",
+    "vendorId": 7
+}
+---------------------------------------------------------------
+
+API - http://localhost:8081/vendors_data (GET)
+response:
+{
+    "success": true,
+    "message": "Vendors data fetched successfully",
+    "vendors": [
+        {
+            "id": 5,
+            "name": "Harsh ",
+            "contact_number": "9179518690",
+            "charges": 300,
+            "status": 1,
+            "created_at": "2025-02-27T19:37:43.000Z",
+            "updated_at": "2025-02-27T19:37:43.000Z"
+        },
+    ]
+}
+---------------------------------------------------------------
+
+API - http://localhost:8081/service-request (POST)
+payload:
+{
+  "userId": 1,
+  "description": "Need Interior designer",
+  "location": "Mumbai"
+}
+
+response:
+{
+    "message": "Service request created",
+    "requestId": 4
+}
+---------------------------------------------------------------
+
+API - http://localhost:8081/get-requests (GET)
+response:
+[
+    {
+        "service_id": 1,
+        "userID": 1,
+        "service_description": "Need internet installation at my new address.",
+        "location": "Pune",
+        "status": 4,
+        "created_at": "2025-02-28T19:00:32.000Z"
+    },
+    {
+        "service_id": 2,
+        "userID": 1,
+        "service_description": "Need Plumber for home",
+        "location": "Mumbai",
+        "status": 0,
+        "created_at": "2025-02-28T19:30:44.000Z"
+    },
+]
+---------------------------------------------------------------
+
+API - http://localhost:8081/get-total-requests-count (GET)
+response:
+{
+    "Request_Count": 4
+}
+---------------------------------------------------------------
+
+API - http://localhost:8081/update-service-status (POST)
+payload:
+{
+    "userId": "1",
+    "serviceId": "1",
+    "confirmationStatus": 1
+}
+response:
+{
+    "message": "Status updated successfully",
+    "status": 4
+}
+---------------------------------------------------------------
+---------------------------------------------------------------

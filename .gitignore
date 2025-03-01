@@ -1,0 +1,8 @@
+# frontend related ignore's
+/Frontend/node_modules
+
+
+
+
+# backend related ignore's
+/Backend/node_modules

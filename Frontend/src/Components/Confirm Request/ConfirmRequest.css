@@ -1,0 +1,11 @@
+.status{
+    color: green;
+    background-color: rgb(182, 233, 181);
+    border: 1px solid green;
+    border-radius: 5px;
+    width: max-content;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 5px 8px;
+    margin: 0;
+}

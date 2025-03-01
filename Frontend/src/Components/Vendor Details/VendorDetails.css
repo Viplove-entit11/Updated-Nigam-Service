@@ -1,0 +1,13 @@
+.vendor-registration-details
+{
+    border: 1px solid;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.vendor-registration-form{
+    border: 1px solid #ccc;
+    width: 400px;
+    padding: 30px 20px ;
+}
