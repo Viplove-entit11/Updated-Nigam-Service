@@ -17,6 +17,7 @@ const TotalRequest = () => {
   const [totalPages, setTotalPages] = useState(1);
   const limit = 10;
 
+  // Fetch all service requests
   const fetchAllRequest = async (page = 1) => {
     try {
       const response = await fetch(
@@ -39,7 +40,7 @@ const TotalRequest = () => {
     }
   };
 
-  // API for fetching all vendor name  
+  // Fetch all vendor names
   const fetchAllVendorNames = async () => {
     try {
       const response = await fetch("http://localhost:8081/fetch_vendors_name");
@@ -56,9 +57,9 @@ const TotalRequest = () => {
   useEffect(() => {
     fetchAllRequest(currentPage);
     fetchAllVendorNames();
-  }, [currentPage, setTotalRequestData, setAllotedVendorDetails, ]);
+  }, [currentPage]);
 
-  // handle vendor change
+  // Handle vendor selection change
   const handleVendorChange = (serviceId, vendorName) => {
     setAllotedVendorDetails((prev) => ({
       ...prev,
@@ -66,9 +67,15 @@ const TotalRequest = () => {
     }));
   };
 
-  // handle vendor allotement click 
+  // Handle vendor allotment
   const handleAllotClick = async (serviceId) => {
     try {
+      const vendorName = allotedVendorDetails[serviceId];
+      if (!vendorName) {
+        toast.error("Please select a vendor before allotting.");
+        return;
+      }
+
       const response = await fetch(
         "http://localhost:8081/service_status_update",
         {
@@ -77,7 +84,7 @@ const TotalRequest = () => {
           body: JSON.stringify({
             service_id: serviceId,
             status: 1,
-            vendor_name: allotedVendorDetails[serviceId],
+            vendor_name: vendorName,
           }),
         }
       );
@@ -86,19 +93,23 @@ const TotalRequest = () => {
       if (!response.ok) throw new Error(data.message || "Failed to update status.");
 
       toast.success("Vendor Allotted Successfully!");
+
+      // ✅ Update totalRequestData to reflect the allotment immediately
       setTotalRequestData((prevData) =>
         prevData.map((request) =>
           request.service_id === serviceId
-            ? { ...request, status: 1, vendor_name: allotedVendorDetails[serviceId] }
+            ? { ...request, vendor_alloted: vendorName, status: 1 } // Update vendor name & status
             : request
         )
       );
+
     } catch (error) {
       console.error("Error updating service status:", error);
       toast.error("Failed to allot vendor.");
     }
   };
 
+  // Handle service status change
   const handleStatusChange = (serviceId, status) => {
     console.log(`Status changed for ${serviceId} to ${status}`);
     // Implement API call to update status here
@@ -128,8 +139,8 @@ const TotalRequest = () => {
               <td>{request.userID}</td>
               <td>{request.service_description}</td>
               <td className="d-flex justify-content-center align-items-center">
-                {request.vendor_alloted !== null ? (
-                  <span>{request.vendor_alloted}</span>
+                {request.vendor_alloted ? (
+                  <span>{request.vendor_alloted}</span> // ✅ Show allotted vendor name
                 ) : (
                   <>
                     <select
@@ -147,14 +158,12 @@ const TotalRequest = () => {
                       ))}
                     </select>
 
-                    {request.vendor_alloted === null && (
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => handleAllotClick(request.service_id)}
-                      >
-                        Allot
-                      </button>
-                    )}
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleAllotClick(request.service_id)}
+                    >
+                      Allot
+                    </button>
                   </>
                 )}
               </td>
