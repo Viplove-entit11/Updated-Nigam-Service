@@ -29,6 +29,11 @@ db.connect((err) => {
 API Routes
 */
 
+// default backend route
+app.get('/',(request, response)=>{
+    return response.json("From Backend")
+})
+
 // API route for dashboard data
 app.get("/dashboard-stats", (req, res) => {
     const query = `
@@ -47,10 +52,6 @@ app.get("/dashboard-stats", (req, res) => {
       return res.status(200).json({ success: true, data: result[0] });
     });
   });
-
-app.get('/',(request, response)=>{
-    return response.json("From Backend")
-})
 
 // endpoint to get vendors data from vendors table
 app.get('/vendors_data', (request, response) => {
@@ -270,7 +271,7 @@ app.get('/get-requests', (request, response) => {
     });
 });
 
-// API route to update status of request based on confirmation Status=> agree (1) / disagree (0) of user
+// API route to update status of request based on confirmation Status=> agree (1) / disagree (0) of user (for mobile app)
 app.post('/confirmation-service-status', (req, res) => {
     const { userId, serviceId, confirmationStatus } = req.body;
 
@@ -328,15 +329,15 @@ app.get('/fetch_vendors_name', (req, res) => {
 
 // API Route to updated service status
 app.post('/service_status_update', (request, response) => {
-    const { service_id, status } = request.body; // Extract service_id and status from request
+    const { service_id, status, vendor_name } = request.body; // Extract service_id, status, and vendor_name
 
-    if (!service_id || status === undefined) {
-        return response.status(400).json({ message: "Service ID and status are required." });
+    if (!service_id || status === undefined || !vendor_name) {
+        return response.status(400).json({ message: "Service ID, status, and vendor name are required." });
     }
 
-    const query = "UPDATE service_request SET status = ? WHERE service_id = ?";
-    
-    db.query(query, [status, service_id], (error, result) => {
+    const query = "UPDATE service_request SET status = ?, vendor_alloted = ? WHERE service_id = ?";
+
+    db.query(query, [status, vendor_name, service_id], (error, result) => {
         if (error) {
             console.error('Database error:', error);
             return response.status(500).json({ message: "Database error", error });
@@ -346,7 +347,7 @@ app.post('/service_status_update', (request, response) => {
             return response.status(404).json({ message: "Service request not found." });
         }
 
-        response.json({ message: "Service status updated successfully." });
+        response.json({ message: "Service status and vendor updated successfully." });
     });
 });
 

@@ -47,12 +47,7 @@ const Dashboard = () => {
   
       fetchRequestCount();
     }, []); 
-
     
-  
-
-
-
   return (
     <div className="dashboard">
         {/* Number of vendors */}
