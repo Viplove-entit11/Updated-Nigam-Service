@@ -1,12 +1,16 @@
 // resources/js/context/Context.jsx
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 // 1. Create Context
 const AuthContext = createContext();
 
 // 2. Create Provider Component
 export const AuthProvider = ({ children }) => {
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false); // checking for whether the admin is logged in
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
+    // Check local storage for login state
+    const savedLoginState = localStorage.getItem('isAdminLoggedIn');
+    return savedLoginState === 'true'; // Return true if logged in
+  }); // checking for whether the admin is logged in
 
   //   admin credential state
   const [adminEmail, setAdminEmail] = useState("");
@@ -27,18 +31,28 @@ export const AuthProvider = ({ children }) => {
   const [totalRequestData, setTotalRequestData] = useState([]);
 
   // getting list of all vendor name
-  const [vendorNameList, setVendorNameList] = useState([])
+  const [vendorNameList, setVendorNameList] = useState([]);
 
-  // alloted vendor name state from total request List 
+  // alloted vendor name state from total request List
   const [allotedVendorDetails, setAllotedVendorDetails] = useState({});
 
   // confirm request list data state
-  const[confirmRequestList, setConfirmRequestList] = useState([]);
+  const [confirmRequestList, setConfirmRequestList] = useState([]);
 
   // closed or uncomplete request list data state
-  const[closedRequestList, setClosedRequestList] = useState([]);
+  const [closedRequestList, setClosedRequestList] = useState([]);
 
-  return (
+  // States for status update functionality
+  const [statusChanges, setStatusChanges] = useState({});
+  const [showUpdateButton, setShowUpdateButton] = useState({});
+  const [currentStatusValue, setCurrentStatusValue] = useState({});
+
+  useEffect(() => {
+    // Persist login state to local storage
+    localStorage.setItem('isAdminLoggedIn', isAdminLoggedIn);
+  }, [isAdminLoggedIn]);
+
+  return ( 
     <AuthContext.Provider
       value={{
         // IsAdminLoggedIn
@@ -69,23 +83,40 @@ export const AuthProvider = ({ children }) => {
         closedRequestCount,
         setClosedRequestCount,
 
-        // Total request data 
-        totalRequestData, setTotalRequestData,
+        // Total request data
+        totalRequestData,
+        setTotalRequestData,
 
-        // vendor Name array state 
-        vendorNameList, setVendorNameList,
+        // vendor Name array state
+        vendorNameList,
+        setVendorNameList,
 
         // alloted vendor name
-        allotedVendorDetails, setAllotedVendorDetails,
+        allotedVendorDetails,
+        setAllotedVendorDetails,
 
         // confirm request List State
-        confirmRequestList, setConfirmRequestList,
+        confirmRequestList,
+        setConfirmRequestList,
 
         // closed or uncomplete request List State
-        closedRequestList, setClosedRequestList,
+        closedRequestList,
+        setClosedRequestList,
+
+        // state updates when got changed
+        statusChanges,
+        setStatusChanges,
+
+        // state for displaying the update button
+        showUpdateButton,
+        setShowUpdateButton,
+
+        // state for indicating current status value (complete / incomplete)
+        currentStatusValue,
+        setCurrentStatusValue,
       }}
     >
-      {children}
+      {children} 
     </AuthContext.Provider>
   );
 };

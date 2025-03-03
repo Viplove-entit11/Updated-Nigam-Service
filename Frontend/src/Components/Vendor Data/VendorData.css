@@ -5,3 +5,22 @@
     height: 100%;
     overflow-y: scroll;
 }
+.active-vendor{
+    border: green;
+    background-color: var(--complete-background-color);
+    color: var(--complete-text-color);
+    border: green;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.inactive-vendor
+{
+    background-color: var(--incomplete-background-color);
+    color: var(--incomplete-text-color);
+    border: red;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-weight: 500;
+}

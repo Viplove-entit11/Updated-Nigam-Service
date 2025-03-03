@@ -34,7 +34,7 @@ const Dashboard = () => {
           }
           
           const data = await response.json();
-          console.log("Data :", data.data)
+          // console.log("Data :", data.data)
           setVendorCount(data.data.total_active_vendors)
           settotalRequestCount(data.data.total_requests)
           setClosedRequestCount(data.data.closed_requests)

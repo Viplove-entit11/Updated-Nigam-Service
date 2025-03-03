@@ -6,6 +6,22 @@
   box-sizing: border-box;
 }
 
+/* color defintion */
+:root{
+  --complete-background-color: rgb(167, 231, 167);
+  --incomplete-background-color: rgb(238, 172, 172);
+  --complete-text-color : green;
+  --incomplete-text-color: red;
+
+  /* inprogress color shade*/
+  --inprogress-background-color: rgb(231, 231, 173);
+  --inprogress-text-color: rgb(0, 0, 0);
+
+  /* alloted color shade  */
+  --alloted-background-color : rgb(174, 205, 240);
+  --alloted-text-color : rgb(23, 119, 228); 
+}
+
 html, body{
   font-family: 'Inter', sans-serif;
 }

@@ -6,11 +6,11 @@
     overflow-y: scroll;
 }
 .closed-status{
-    color: red;
-    background-color: rgb(238, 180, 180);
+    color: var(--incomplete-text-color);
+    background-color: var(--incomplete-background-color);
     border: 1px solid red;
     width: fit-content;
-    padding: 1px 8px;
+    padding: 5px 8px;
     border-radius: 5px;
-    text-align: center;
+    font-weight: 500;
 }

@@ -418,6 +418,53 @@ app.get('/get-closed-request', (request, response) => {
 });
 
 
+// update-complete status
+app.post('/update-complete-status', (request, response) => {
+    const { userId, serviceId, confirmationStatus } = request.body;
+
+    // Validate request body
+    if (userId === undefined || serviceId === undefined || confirmationStatus === undefined) {
+        return response.status(400).json({ message: 'userId, serviceId, and confirmationStatus are required' });
+    }
+
+    // Determine the new status and the corresponding message
+    let newStatus;
+    let messageOnCompleteStatus;
+
+    if (confirmationStatus === '2') {
+        newStatus = 2; // Completed
+        messageOnCompleteStatus = 1;
+    } else if (confirmationStatus === '3') {
+        newStatus = 3; // Uncomplete/Closed
+        messageOnCompleteStatus = 2; // show 2 when it is incomplete or closed
+    } else {
+        return response.status(400).json({ message: 'Invalid confirmationStatus' });
+    }
+
+    // Update the status and complete_status message in the service_request table
+    const query = `
+        UPDATE service_request 
+        SET status = ?, complete_status = ? 
+        WHERE userID = ? AND service_id = ?
+    `;
+
+    db.query(query, [newStatus, messageOnCompleteStatus, userId, serviceId], (error, result) => {
+        if (error) {
+            console.error('Database error:', error);
+            return response.status(500).json({ message: 'Database error', error });
+        }
+
+        if (result.affectedRows > 0) {
+            response.status(200).json({ message: 'Status updated successfully', status: newStatus, complete_status: messageOnCompleteStatus });
+        } else {
+            response.status(404).json({ message: 'No matching record found' });
+        }
+    });
+});
+
+
+
+
 
 
 

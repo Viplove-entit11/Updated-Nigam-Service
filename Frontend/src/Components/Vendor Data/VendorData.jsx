@@ -81,9 +81,9 @@ const VendorList = () => {
                 <td>{vendor.charges}</td>
                 <td>
                   {vendor.status === 1 ? (
-                    <span className="badge bg-success">Active</span>
+                    <span className="active-vendor">Active</span>
                   ) : (
-                    <span className="badge bg-secondary">Inactive</span>
+                    <span className="inactive-vendor">Inactive</span>
                   )}
                 </td>
                 <td>
