@@ -1,12 +1,16 @@
 // resources/js/context/Context.jsx
 import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Importing useNavigate
+
 
 // 1. Create Context
 const AuthContext = createContext();
 
 // 2. Create Provider Component
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate(); // Initialize navigate
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
+
     // Check local storage for login state
     const savedLoginState = localStorage.getItem('isAdminLoggedIn');
     return savedLoginState === 'true'; // Return true if logged in
@@ -47,12 +51,26 @@ export const AuthProvider = ({ children }) => {
   const [showUpdateButton, setShowUpdateButton] = useState({});
   const [currentStatusValue, setCurrentStatusValue] = useState({});
 
+  // Loader state 
+  const [isLoading, setIsLoading] = useState(true);
+
+  // useEffect for always to check isAdminLoggedIn
   useEffect(() => {
     // Persist login state to local storage
     localStorage.setItem('isAdminLoggedIn', isAdminLoggedIn);
   }, [isAdminLoggedIn]);
 
-  return ( 
+
+  // function for logout functionality
+  const logout = () => {
+    setIsAdminLoggedIn(false);
+    localStorage.removeItem('isAdminLoggedIn');
+    navigate("/admin-login"); // Redirect to login page after logout
+  };
+
+
+  return (
+
     <AuthContext.Provider
       value={{
         // IsAdminLoggedIn
@@ -114,6 +132,12 @@ export const AuthProvider = ({ children }) => {
         // state for indicating current status value (complete / incomplete)
         currentStatusValue,
         setCurrentStatusValue,
+
+        // logout function for logginout functionality
+        logout,
+
+        // isLoading State for rendering loader on true, 
+        isLoading, setIsLoading,
       }}
     >
       {children} 
