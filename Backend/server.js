@@ -10,13 +10,7 @@ const app = express()
 app.use(cors("*"))
 app.use(express.json());
 
-// creating connection with database
-// const db = mysql.createConnection({
-//     host:"localhost",
-//     user:"root",
-//     password:"",
-//     database:"nigam_service"
-// })
+// creating connection to database
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -24,6 +18,7 @@ const db = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
+// checking for connection
 db.connect((err) => {
     if (err) {
       console.error('Database connection failed: ' + err.stack);
