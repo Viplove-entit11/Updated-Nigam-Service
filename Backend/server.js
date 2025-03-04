@@ -1,18 +1,29 @@
 const express = require('express')
 const mysql= require('mysql')
 const cors = require('cors')
+// enabling dotenv
+const dotenv = require("dotenv");
+dotenv.config();
+
 const app = express()
 
 app.use(cors("*"))
 app.use(express.json());
 
 // creating connection with database
+// const db = mysql.createConnection({
+//     host:"localhost",
+//     user:"root",
+//     password:"",
+//     database:"nigam_service"
+// })
 const db = mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"",
-    database:"nigam_service"
-})
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+});
+
 db.connect((err) => {
     if (err) {
       console.error('Database connection failed: ' + err.stack);
@@ -33,7 +44,6 @@ API Routes
 app.get('/',(request, response)=>{
     return response.json("Coming From Backend")
 })
-
 
 // API Route for admin login
 app.post("/admin-login", (req, res) => {
@@ -509,10 +519,36 @@ app.post("/get-userid-services", (req, res) => {
     });
 });
 
+// API Route for deleting the Vendor from records based on vendor_ID 
+app.delete("/delete_vendor/:id", (req, res) => {
+    const vendorId = req.params.id;
+  
+    // Check if the vendor exists
+    db.query("SELECT * FROM vendors WHERE id = ?", [vendorId], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Error fetching vendor", error: err });
+      }
+  
+      if (result.length === 0) {
+        return res.status(404).json({ message: "Vendor not found" });
+      }
+  
+      // Delete vendor
+      db.query("DELETE FROM vendors WHERE id = ?", [vendorId], (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: "Error deleting vendor", error: err });
+        }
+        return res.status(200).json({ message: "Vendor deleted successfully" });
+      });
+    });
+});
+
+// API For returning the data from service_request for mobile Application
+app.get("/")
 
 
 // APP LISTENING TO PORT 8081
 app.listen(8081,'0.0.0.0',()=>{
-    console.log("Node Server Listening at: http://localhost:8081")
+    console.log(`Node Server Listening at: ${process.env.SITE_URL}`)
 })
 

@@ -7,8 +7,10 @@ import Loader from "../Loader/Loader";
 
 
 const VendorList = () => {
+  // state for vendors details
   const [vendors, setVendors] = useState([]);
 
+  // loading state from context 
   const {isLoading, setIsLoading} = useAuth();
 
   // Fetching vendors data from the API
@@ -39,10 +41,10 @@ const VendorList = () => {
     fetchVendors();
   }, []);
 
-  // Handle Delete Vendor
+  // function for deleting the vendor from records based on vendor_id
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this vendor?")) {
-      fetch(`http://localhost:8081/delete_vendor/${id}`, {
+      fetch(`${import.meta.env.VITE_API_URL}delete_vendor/${id}`, {
         method: "DELETE",
       })
         .then((response) => {
@@ -77,7 +79,7 @@ const VendorList = () => {
   return (
     <div className="vendor-list">
       <h5>Vendors List</h5>
-      {vendors.length > 0 ? (
+      
         <table className="table table-striped">
           <thead>
             <tr>
@@ -110,9 +112,7 @@ const VendorList = () => {
             ))}
           </tbody>
         </table>
-      ) : (
-        <p>No vendors found.</p>
-      )}
+      
     </div>
   );
 };

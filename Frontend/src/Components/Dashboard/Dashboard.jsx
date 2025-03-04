@@ -90,25 +90,25 @@ const Dashboard = () => {
           {
             label: "Total Vendors",
             value: vendorCount,
-            icon: <FaUsers />,
+            icon: <FaUsers className="vendor-icon"/>,
             link: "/vendor_list",
           },
           {
             label: "Total Requests",
             value: totalRequestCount,
-            icon: <FaTasks />,
+            icon: <FaTasks className="total-request-icon"/>,
             link: "/total_request",
           },
           {
             label: "Confirm Requests",
             value: confirmRequestCount,
-            icon: <IoCheckmarkDoneCircleSharp />,
+            icon: <IoCheckmarkDoneCircleSharp className="confirm-request-icon" />,
             link: "/confirm_request",
           },
           {
             label: "Closed Requests",
             value: closedRequestCount,
-            icon: <AiOutlineFileDone />,
+            icon: <AiOutlineFileDone className="closed-request-icon" />,
             link: "/closed_request",
           },
         ].map(({ label, value, icon, link }, index) => (
