@@ -513,6 +513,6 @@ app.post("/get-userid-services", (req, res) => {
 
 // APP LISTENING TO PORT 8081
 app.listen(8081,'0.0.0.0',()=>{
-    console.log("listening")
+    console.log("Node Server Listening at: http://localhost:8081")
 })
 
