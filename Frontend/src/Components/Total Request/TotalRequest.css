@@ -25,18 +25,7 @@
   font-size: 14px;
   /* color: white; */
 }
-/*
---complete-background-color: rgb(167, 231, 167);
-  --incomplete-background-color: rgb(238, 172, 172);
-  --complete-text-color : green;
-  --incomplete-text-color: red;
 
-  --inprogress-background-color: rgb(231, 231, 173);
-  --inprogress-text-color: rgb(0, 0, 0);
-
-  --alloted-background-color : rgb(174, 205, 240);
-  --alloted-text-color : rgb(23, 119, 228); 
-*/
 .request_status
 {
   font-size: 14px;
@@ -52,9 +41,9 @@
 }
 
 .pending{
-  background-color: rgb(231, 163, 132);
-  color: rgb(238, 130, 6);
-  border:  rgb(238, 130, 6);
+  background-color: rgb(235, 188, 167);
+  color: rgb(99, 54, 3);
+  border:  1px solid rgb(238, 130, 6);
 }
 
 .completed{

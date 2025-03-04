@@ -238,7 +238,7 @@ const TotalRequest = () => {
                 <td>{request.service_id}</td>
                 <td>{request.userID}</td>
                 <td>{request.service_description}</td>
-                <td className="d-flex justify-content-center align-items-center">
+                <td className="d-flex justify-content-center align-items-center gap-2">
                   {request.vendor_alloted ? (
                     <span>{request.vendor_alloted}</span> // Show allotted vendor name
                   ) : (
@@ -275,7 +275,7 @@ const TotalRequest = () => {
                   <span
                     className={`badge ${
                       request.status === 0
-                        ? "request_status pending text-dark"
+                        ? "request_status pending"
                         : request.status === 1
                         ? "request_status alloted"
                         : request.status === 2
@@ -297,7 +297,7 @@ const TotalRequest = () => {
                   </span>
                 </td>
                 <td>{request.created_at}</td>
-                <td className="d-flex justify-content-center align-items-center">
+                <td className="d-flex justify-content-center align-items-center gap-2">
   {request.complete_status === 1 ? (
     <p className="complete-status-completed">
 Completed
