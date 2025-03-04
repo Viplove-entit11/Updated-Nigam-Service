@@ -1,26 +1,56 @@
-.sidebar{
-    max-height: 100vh;
-    height: 100vh;
-    background-color: #cedff8;
-    width: 300px;
-    border: 1px solid #ccc;
+.sidebar {
+  background-color: #cedff8;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  transition: all 0.3s ease;
 }
-.sidebar ul{
-    /* border: 1px solid; */
-    padding: 10px 5px;
-    padding: px 5px;
-    display:flex;
-    flex-direction:column ;
-    gap: 10px;
+
+.sidebar ul {
+  padding: 10px 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.sidebar ul a{
-    border: 1px solid #ccc;
-    padding: 8px ;
-    font-weight: 500;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: black;
-    font-weight: 500;
+
+.sidebar ul a {
+  padding: 12px;
+  font-weight: 500;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: black;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar ul a:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 1024px) {
+  .sidebar {
+    width: 100%;
+    max-height: 300px;
+  }
+
+  .sidebar ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .sidebar ul a {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    display: none; /* Consider replacing with a mobile menu */
+  }
 }

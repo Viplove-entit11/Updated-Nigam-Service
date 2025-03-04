@@ -1,12 +1,72 @@
 .main-app{
-  /* border: 1px solid red; */
+  display: grid;
+  grid-template-areas: 
+    "sidebar navbar"
+    "sidebar main-content";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
   height: 100vh;
   max-height: 100vh;
-  width: 100%;
   overflow: hidden;
-  display: flex;
+  /* width: 100%!important; */
+  /* border: 1px solid black; */
 }
 
-.main-content{
+.sidebar {
+  grid-area: sidebar;
+  max-width: 300px;
+  min-width: 200px;
+  overflow-y: auto;
+}
+
+.content-navbar {
+  grid-area: navbar;
   width: 100%;
+}
+
+.main-content {
+  grid-area: main-content;
+  overflow-y: auto;
+  padding: 15px;
+}
+
+/* Responsive Breakpoints */
+@media screen and (max-width: 1024px) {
+  .main-app {
+    grid-template-areas: 
+      "navbar"
+      "sidebar"
+      "main-content";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .sidebar {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .main-app {
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .sidebar {
+    display: none; /* Optional: you might want a mobile menu instead */
+  }
+
+  .content-navbar {
+    padding: 10px;
+  }
+
+  .main-content {
+    padding: 10px;
+  }
+}
+
+/* Ensure no horizontal scrolling */
+body, html {
+  max-width: 100%;
+  overflow-x: hidden;
 }

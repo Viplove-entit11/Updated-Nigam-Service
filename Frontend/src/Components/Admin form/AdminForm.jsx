@@ -2,19 +2,24 @@ import { useAuth } from "../../Context/Context";
 import "./AdminForm.css";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { FaUserAlt } from "react-icons/fa";
+
 
 const AdminForm = () => {
+  // navigation for navigating to a particular page or route
   const navigate = useNavigate();
+
+  // state from context
   const {
     adminEmail,
     setAdminEmail,
     adminPassword,
     setAdminPassword,
     setIsAdminLoggedIn,
-    isLoading,
     setIsLoading,
   } = useAuth();
-
+  
+  // function for handling admin login
   const handleAdminLoggin = async (event) => {
     event.preventDefault();
 
@@ -23,7 +28,14 @@ const AdminForm = () => {
 
     try {
       setIsLoading(true)
+      // Validation for when admin email and password are empty 
+      if (!adminEmail || !adminPassword) {
+        toast.error("Both email and password are required.");
+        return; // Prevent further execution
+      }
+
       const response = await fetch("http://localhost:8081/admin-login", {
+
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,11 +67,15 @@ const AdminForm = () => {
 
   return (
     <div className="admin-form">
+
+<FaUserAlt className="admin-icon"/>
+{/* admin login form */}
       <form
         onSubmit={(event) => {
           handleAdminLoggin(event);
         }}
       >
+
         <div className="mb-3">
           <label htmlFor="adminMail" className="form-label">
             Email address
@@ -73,6 +89,7 @@ const AdminForm = () => {
             onChange={(event) => {
               setAdminEmail(event.target.value);
             }}
+            required
           />
         </div>
         <div className="mb-3">
@@ -87,12 +104,16 @@ const AdminForm = () => {
             onChange={(event) => {
               setAdminPassword(event.target.value);
             }}
+            required
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          {!isLoading?"Getting You In!!":"Submit"}
+          {"Submit"}
         </button>
       </form>
+
+
+
     </div>
   );
 };

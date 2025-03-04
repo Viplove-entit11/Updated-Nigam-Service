@@ -77,7 +77,7 @@ const Dashboard = () => {
         <div className="div1">
           <div className="div-text mb-2">
             <span>Total Vendors</span>
-            <FaUsers className="vendor-icon" />
+            <FaUsers className="dash-icon vendor-icon" />
           </div>
           <div className="div-value">
             <span>{vendorCount}</span>
@@ -90,7 +90,7 @@ const Dashboard = () => {
         <div className="div2">
           <div className="div-text mb-2">
             <span>Total Requests</span>
-            <FaTasks className="total-request-icon" />
+            <FaTasks className="dash-icon total-request-icon" />
           </div>
           <div className="div-value">
             <span>{totalRequestCount}</span>
@@ -103,7 +103,7 @@ const Dashboard = () => {
         <div className="div3">
           <div className="div-text mb-2">
             <span>Confirm Requests</span>
-            <IoCheckmarkDoneCircleSharp className="confirm-request-icon" />
+            <IoCheckmarkDoneCircleSharp className="dash-icon confirm-request-icon" />
           </div>
           <div className="div-value">
             <span>{confirmRequestCount}</span>
@@ -116,7 +116,7 @@ const Dashboard = () => {
         <div className="div4">
           <div className="div-text mb-2">
             <span>Closed Requests</span>
-            <AiOutlineFileDone className="closed-request-icon" />
+            <AiOutlineFileDone className="dash-icon closed-request-icon" />
           </div>
           <div className="div-value">
             <span>{closedRequestCount}</span>

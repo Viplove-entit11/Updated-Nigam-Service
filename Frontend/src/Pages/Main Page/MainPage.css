@@ -1,13 +1,72 @@
-.main-page{
-    display: flex;
-    /* overflow: ; */
+.main-page {
+    width: 100vw;
+    max-width: 100%;
     height: 100vh;
     max-height: 100vh;
-    width: 100%;
-    max-width: 100%;
+    display: grid;
+    grid-template-areas: 
+        "sidebar content";
+    grid-template-columns: auto 1fr;
+    overflow: hidden;
+    box-sizing: border-box;
 }
-.main-content{
-    display: flex;
-    flex-direction: column;
-    /* overflow-x: scroll; */
+
+.main-sidebar {
+    grid-area: sidebar;
+    width: 100%;
+    max-width: 300px;
+    background-color: #cedff8;
+    overflow-y: auto;
+}
+
+.main-content {
+    grid-area: content;
+    width: 100%;
+    overflow-y: auto;
+    padding: clamp(10px, 3vw, 15px);
+    box-sizing: border-box;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .main-page {
+        grid-template-areas: 
+            "content"
+            "sidebar";
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+        width: 100vw;
+        max-width: 100%;
+    }
+
+    .main-sidebar {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-page {
+        grid-template-rows: auto 1fr;
+    }
+
+    .main-sidebar {
+        display: none; /* Consider replacing with a mobile menu */
+    }
+
+    .main-content {
+        padding: clamp(5px, 2vw, 10px);
+        width: 100vw;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 5px;
+    }
 }

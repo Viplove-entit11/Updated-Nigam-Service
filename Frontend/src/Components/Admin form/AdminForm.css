@@ -1,6 +1,103 @@
-.admin-form{
-    padding: 40px;
+.admin-form {
+    padding: clamp(20px, 5vw, 40px);
     box-shadow: 0px 0px 4px grey;
-    width: 500px;
+    width: clamp(280px, 90%, 500px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(15px, 3vw, 30px);
+    background: #fff;
+    border-radius: 10px;
+    /* text-align: center; */
+    margin: auto;
+    margin-top: clamp(20px, 5vh, 50px);
+}
 
+/* Admin Icon */
+.admin-icon {
+    font-size: clamp(50px, 10vw, 80px);
+    align-self: center;
+    color: #007bff;
+}
+
+/* Form Styling */
+.admin-form form {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 3vw, 20px);
+}
+
+/* Input Fields */
+.admin-form input {
+    width: 100%;
+    padding: clamp(8px, 2vw, 10px);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: clamp(14px, 3vw, 16px);
+    outline: none;
+    transition: 0.3s;
+}
+
+.admin-form input:focus {
+    border-color: #007bff;
+    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button Styling */
+.admin-form .btn {
+    padding: clamp(8px, 2vw, 10px);
+    font-size: clamp(16px, 4vw, 18px);
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+    min-height: 44px;  /* Improve touch target */
+    min-width: 44px;   /* Improve touch target */
+}
+
+.admin-form .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .admin-form {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .admin-icon {
+        font-size: 60px;
+    }
+
+    .admin-form input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .admin-form .btn {
+        font-size: 16px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 400px) {
+    .admin-form {
+        width: 95%;
+    }
+
+    .admin-icon {
+        font-size: 50px;
+    }
+
+    .admin-form input {
+        font-size: 14px;
+        padding: 6px;
+    }
+
+    .admin-form .btn {
+        font-size: 14px;
+        padding: 6px;
+    }
 }
