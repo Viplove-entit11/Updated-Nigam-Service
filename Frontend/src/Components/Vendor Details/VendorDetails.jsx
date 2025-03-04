@@ -87,7 +87,6 @@ const VendorDetails = () => {
         className="vendor-registration-form"
         onSubmit={handleVendorRegistration}
       >
-        {/* Vendor Name */}
         <div className="mb-3">
           <label htmlFor="vendorName" className="form-label">
             Vendor Name
@@ -96,47 +95,49 @@ const VendorDetails = () => {
             type="text"
             className="form-control"
             id="vendorName"
-            placeholder="Vendor Name"
+            placeholder="Enter Vendor Name"
             value={vendorName}
             onChange={(event) => setVendorName(event.target.value)}
+            required
           />
         </div>
 
-        {/* Contact Number */}
         <div className="mb-3">
           <label htmlFor="vendorContact" className="form-label">
-            Contact
+            Contact Number
           </label>
           <input
-            type="text"
+            type="tel"
             className="form-control"
             id="vendorContact"
-            placeholder="Contact"
+            placeholder="Enter 10-digit Contact Number"
             value={vendorContact}
             onChange={handleContactChange}
             onBlur={validateContact}
+            maxLength="10"
+            required
           />
           {contactError && (
             <small className="text-danger">{contactError}</small>
           )}
         </div>
 
-        {/* Charges */}
         <div className="mb-3">
           <label htmlFor="vendorCharges" className="form-label">
-            Charges
+            Service Charges
           </label>
           <input
-            type="text"
+            type="number"
             className="form-control"
             id="vendorCharges"
-            placeholder="e.g., 2000"
+            placeholder="Enter Service Charges"
             value={vendorCharges}
             onChange={(event) => setVendorCharges(event.target.value)}
+            required
           />
         </div>
 
-        <button type="submit" className="btn btn-success">
+        <button type="submit" className="btn">
           Register Vendor
         </button>
       </form>
