@@ -275,14 +275,14 @@ const TotalRequest = () => {
                   <span
                     className={`badge ${
                       request.status === 0
-                        ? "bg-warning text-dark"
+                        ? "request_status pending text-dark"
                         : request.status === 1
-                        ? "bg-primary"
+                        ? "request_status alloted"
                         : request.status === 2
-                        ? "bg-success"
+                        ? "request_status completed"
                         : request.status === 3
-                        ? "bg-danger"
-                        : "bg-info text-dark"
+                        ? "request_status incompleted"
+                        : "request_status inproress text-dark"
                     }`}
                   >
                     {request.status === 0
