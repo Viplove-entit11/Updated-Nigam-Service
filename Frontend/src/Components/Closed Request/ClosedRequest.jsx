@@ -14,7 +14,7 @@ const ClosedRequest = () => {
   // Fetching closed service requests with pagination
   const fetchAllClosedRequest = async (page = 1) => {
     try {
-      const response = await fetch(`http://localhost:8081/get-closed-request?page=${page}&limit=${limit}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}get-closed-request?page=${page}&limit=${limit}`);
       if (!response.ok) throw new Error("Failed to fetch service requests.");
 
       const data = await response.json();

@@ -32,7 +32,7 @@ const VendorDetails = () => {
     };
 
     // Call the API using Fetch
-    fetch("http://localhost:8081/register_vendor", {
+    fetch(`${import.meta.env.VITE_API_URL}register_vendor`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

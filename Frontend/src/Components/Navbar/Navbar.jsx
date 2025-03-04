@@ -19,7 +19,7 @@ const Navbar = () => {
     <div className='content-navbar'>
         <div className='navbar-right'>
         <FaCircleUser id='admin-icon' />
-        <p>Welcome, {adminEmail} !!</p>
+        <p>Welcome, <span style={{fontWeight:"500"}}> {adminEmail} </span>!!</p>
         </div>
 
 {/* navbar right  */}

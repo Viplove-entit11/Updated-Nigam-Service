@@ -33,8 +33,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchRequestCount = async () => {
+      // console.log("API BACKEND URL WE ARE GETTING: ",import.meta.env.VITE_API_URL)
+      
       try {
-        const response = await fetch("http://localhost:8081/dashboard-stats", {
+        const response = await fetch(import.meta.env.VITE_API_URL + "dashboard-stats", {
           method: "GET",
         });
 

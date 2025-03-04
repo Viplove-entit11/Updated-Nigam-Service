@@ -28,7 +28,7 @@ const TotalRequest = () => {
   const fetchAllRequest = async (page = 1) => {
     try {
       const response = await fetch(
-        `http://localhost:8081/get-requests?page=${page}&limit=${limit}`
+        `${import.meta.env.VITE_API_URL}get-requests?page=${page}&limit=${limit}`
       );
       if (!response.ok) throw new Error("Failed to fetch service requests.");
 

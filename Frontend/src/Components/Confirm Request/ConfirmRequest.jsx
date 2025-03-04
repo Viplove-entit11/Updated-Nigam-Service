@@ -12,7 +12,7 @@ const ConfirmRequest = () => {
   useEffect(() => {
     const getConfirmRequest = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/get-confirm-request?page=${currentPage}&limit=${itemsPerPage}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}get-confirm-request?page=${currentPage}&limit=${itemsPerPage}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch confirmed service requests.");

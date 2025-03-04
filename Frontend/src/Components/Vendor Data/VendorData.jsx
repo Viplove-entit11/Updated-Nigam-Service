@@ -9,7 +9,7 @@ const VendorList = () => {
 
   // Fetching vendors data from the API
   const fetchVendors = () => {
-    fetch("http://localhost:8081/vendors_data")
+    fetch(`${import.meta.env.VITE_API_URL}vendors_data`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch vendors data.");
