@@ -441,7 +441,6 @@ app.get('/get-closed-request', (request, response) => {
     });
 });
 
-
 // update-complete status
 app.post('/update-complete-status', (request, response) => {
     const { userId, serviceId, confirmationStatus } = request.body;
@@ -486,9 +485,29 @@ app.post('/update-complete-status', (request, response) => {
     });
 });
 
-
-
-
+// API Route for getting all services based on UserID
+app.post("/get-userid-services", (req, res) => {
+    const { user_id } = req.body; // Get user_id from POST request
+  
+    if (!user_id) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+  
+    const query = "SELECT * FROM service_request WHERE userID = ?";
+  
+    db.query(query, [user_id], (err, results) => {
+      if (err) {
+        console.error("Error fetching services:", err);
+        return res.status(500).json({ error: "Database query failed" });
+      }
+  
+      if (results.length === 0) {
+        return res.json({ message: "No services found for this user", services: [] });
+      }
+  
+      res.json({ services: results });
+    });
+});
 
 
 

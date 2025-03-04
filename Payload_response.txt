@@ -1,4 +1,4 @@
-API - http://localhost:8081/send-otp   (POST)
+1. API - http://localhost:8081/send-otp   (POST)
 payload:
 {
     "username":"viplove",
@@ -19,7 +19,7 @@ response:
 
 ---------------------------------------------------------------
 
-API - http://localhost:8081/register_vendor (POST)
+2. API - http://localhost:8081/register_vendor (POST)
 payload:
 {
      "vendor_name": "shalin",
