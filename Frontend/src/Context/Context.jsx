@@ -17,7 +17,11 @@ export const AuthProvider = ({ children }) => {
   }); // checking for whether the admin is logged in
 
   //   admin credential state
-  const [adminEmail, setAdminEmail] = useState("");
+  const [adminEmail, setAdminEmail] = useState(() => {
+    // Check local storage for admin email
+    const savedAdminEmail = localStorage.getItem('Admin Email');
+    return savedAdminEmail || ""; // Return saved email or empty string
+  });
   const [adminPassword, setAdminPassword] = useState("");
 
   // vendor registration data state

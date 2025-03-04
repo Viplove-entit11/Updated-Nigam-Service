@@ -19,7 +19,7 @@ db.connect((err) => {
       return;
     }
     console.log('Connected to database.');
-  });
+});
 
 
 
@@ -31,7 +31,7 @@ API Routes
 
 // default backend route
 app.get('/',(request, response)=>{
-    return response.json("From Backend")
+    return response.json("Coming From Backend")
 })
 
 

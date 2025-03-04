@@ -15,9 +15,9 @@ import {
   PieChart,
   Pie,
   Cell,
-} from "recharts"; 
-
+} from "recharts";
 import { useAuth } from "../../Context/Context";
+import Loader from "../Loader/Loader";
 
 const Dashboard = () => {
   const {
@@ -29,20 +29,18 @@ const Dashboard = () => {
     setConfirmRequestCount,
     closedRequestCount,
     setClosedRequestCount,
+    isLoading,
+    setIsLoading,
   } = useAuth();
 
   useEffect(() => {
     const fetchRequestCount = async () => {
-      // console.log("API BACKEND URL WE ARE GETTING: ",import.meta.env.VITE_API_URL)
-      
       try {
-        const response = await fetch(import.meta.env.VITE_API_URL + "dashboard-stats", {
-          method: "GET",
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+        setIsLoading(true);
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}dashboard-stats`
+        );
+        if (!response.ok) throw new Error("Network response was not ok");
 
         const data = await response.json();
         setVendorCount(data.data.total_active_vendors);
@@ -50,7 +48,9 @@ const Dashboard = () => {
         setClosedRequestCount(data.data.closed_requests);
         setConfirmRequestCount(data.data.confirmed_requests);
       } catch (error) {
-        console.log("Error fetching request count:", error);
+        console.error("Error fetching request count:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -64,80 +64,77 @@ const Dashboard = () => {
     { name: "Closed Requests", count: closedRequestCount },
   ];
 
-  const doughnutData = [
-    { name: "Total Vendors", value: vendorCount },
-    { name: "Total Requests", value: totalRequestCount },
-    { name: "Confirmed Requests", value: confirmRequestCount },
-    { name: "Closed Requests", value: closedRequestCount },
-  ];
-
+  const doughnutData = chartData.map(({ name, count }) => ({
+    name,
+    value: count,
+  }));
   const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300"];
+
+  if (isLoading) {
+    return (
+      <div style={{
+        height: "500px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard">
       <div className="dashboard-stats">
-        <div className="div1">
-          <div className="div-text mb-2">
-            <span>Total Vendors</span>
-            <FaUsers className="dash-icon vendor-icon" />
+        {[
+          {
+            label: "Total Vendors",
+            value: vendorCount,
+            icon: <FaUsers />,
+            link: "/vendor_list",
+          },
+          {
+            label: "Total Requests",
+            value: totalRequestCount,
+            icon: <FaTasks />,
+            link: "/total_request",
+          },
+          {
+            label: "Confirm Requests",
+            value: confirmRequestCount,
+            icon: <IoCheckmarkDoneCircleSharp />,
+            link: "/confirm_request",
+          },
+          {
+            label: "Closed Requests",
+            value: closedRequestCount,
+            icon: <AiOutlineFileDone />,
+            link: "/closed_request",
+          },
+        ].map(({ label, value, icon, link }, index) => (
+          <div key={index} className={`div${index + 1}`}>
+            <div className="div-text mb-2">
+              <span>{label}</span>
+              <span className="dash-icon">{icon}</span>
+            </div>
+            <div className="div-value">
+              <span>{value}</span>
+            </div>
+            <div className="div-link">
+              <Link to={link}>Get {label}</Link>
+            </div>
           </div>
-          <div className="div-value">
-            <span>{vendorCount}</span>
-          </div>
-          <div className="div-link">
-            <Link to="/vendor_list">Get Vendors</Link>
-          </div>
-        </div>
-
-        <div className="div2">
-          <div className="div-text mb-2">
-            <span>Total Requests</span>
-            <FaTasks className="dash-icon total-request-icon" />
-          </div>
-          <div className="div-value">
-            <span>{totalRequestCount}</span>
-          </div>
-          <div className="div-link">
-            <Link to="/total_request">Get Total Request</Link>
-          </div>
-        </div>
-
-        <div className="div3">
-          <div className="div-text mb-2">
-            <span>Confirm Requests</span>
-            <IoCheckmarkDoneCircleSharp className="dash-icon confirm-request-icon" />
-          </div>
-          <div className="div-value">
-            <span>{confirmRequestCount}</span>
-          </div>
-          <div className="div-link">
-            <Link to="/confirm_request">Get Confirm Request</Link>
-          </div>
-        </div>
-
-        <div className="div4">
-          <div className="div-text mb-2">
-            <span>Closed Requests</span>
-            <AiOutlineFileDone className="dash-icon closed-request-icon" />
-          </div>
-          <div className="div-value">
-            <span>{closedRequestCount}</span>
-          </div>
-          <div className="div-link">
-            <Link to="/closed_request">Get Closed Request</Link>
-          </div>
-        </div>
+        ))}
       </div>
 
-      
-
-      {/* Charts Container - Side by Side */}
       <div className="charts-container d-flex">
-        {/* Bar Chart */}
         <div className="chart-item">
-          <h5 style={{ fontWeight: "500"}}>Request Statistics</h5>
+          <h5>Request Statistics</h5>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData} margin={{ top: 10, right: 30, left: 20, bottom: 10 }}>
+            <BarChart
+              data={chartData}
+              margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
+            >
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
@@ -147,9 +144,8 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Doughnut Chart */}
         <div className="chart-item">
-          <h5 style={{ fontWeight: "500"}}>Request Distribution</h5>
+          <h5>Request Distribution</h5>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -159,11 +155,13 @@ const Dashboard = () => {
                 cx="50%"
                 cy="50%"
                 outerRadius={100}
-                fill="#8884d8"
                 label
               >
                 {doughnutData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip />

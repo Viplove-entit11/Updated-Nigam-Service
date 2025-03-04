@@ -2,17 +2,22 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "./VendorData.css";
 import { MdDelete } from "react-icons/md";
+import { useAuth } from "../../Context/Context";
+import Loader from "../Loader/Loader";
 
 
 const VendorList = () => {
   const [vendors, setVendors] = useState([]);
 
+  const {isLoading, setIsLoading} = useAuth();
+
   // Fetching vendors data from the API
   const fetchVendors = () => {
+    setIsLoading(true)
     fetch(`${import.meta.env.VITE_API_URL}vendors_data`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch vendors data.");
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch vendors data.");
         }
         return response.json();
       })
@@ -27,6 +32,7 @@ const VendorList = () => {
         console.error("Error fetching vendors:", error);
         toast.error("Error fetching vendors data.");
       });
+      setIsLoading(false)
   };
 
   useEffect(() => {
@@ -56,7 +62,18 @@ const VendorList = () => {
     }
   };
 
-
+  if (isLoading) {
+    return (
+      <div style={{
+        height: "500px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
+        <Loader />
+      </div>
+    );
+  }
   return (
     <div className="vendor-list">
       <h5>Vendors List</h5>
