@@ -1,4 +1,4 @@
-1. API - http://localhost:8081/send-otp   (POST)
+1. API - http://192.168.2.104:8081/send-otp   (POST)
 payload:
 {
     "username":"viplove",
@@ -19,7 +19,7 @@ response:
 
 ---------------------------------------------------------------
 
-2. API - http://localhost:8081/register_vendor (POST)
+2. API - http://192.168.2.104:8081/register_vendor (POST)
 payload:
 {
      "vendor_name": "shalin",
@@ -33,7 +33,7 @@ response:
 }
 ---------------------------------------------------------------
 
-API - http://localhost:8081/vendors_data (GET)
+API - http://192.168.2.104:8081/vendors_data (GET)
 response:
 {
     "success": true,
@@ -52,7 +52,7 @@ response:
 }
 ---------------------------------------------------------------
 
-API - http://localhost:8081/service-request (POST)
+API - http://192.168.2.104:8081/service-request (POST)
 payload:
 {
   "userId": 1,
@@ -67,7 +67,7 @@ response:
 }
 ---------------------------------------------------------------
 
-API - http://localhost:8081/get-requests (GET)
+API - http://192.168.2.104:8081/get-requests (GET)
 response:
 [
     {
@@ -89,24 +89,177 @@ response:
 ]
 ---------------------------------------------------------------
 
-API - http://localhost:8081/get-total-requests-count (GET)
-response:
-{
-    "Request_Count": 4
-}
----------------------------------------------------------------
-
-API - http://localhost:8081/update-service-status (POST)
+API - http://192.168.2.104:8081/confirmation-service-status (POST)
 payload:
 {
-    "userId": "1",
-    "serviceId": "1",
-    "confirmationStatus": 1
+    "userId": "3",
+    "serviceId": "39",
+    "confirmationStatus": 1 (this value should be in integer)
 }
+
 response:
 {
     "message": "Status updated successfully",
     "status": 4
 }
 ---------------------------------------------------------------
+
+API : http://192.168.2.104:8081/fetch_vendors_name (GET)
+
+response:
+{
+    "success": true,
+    "data": [
+        {
+            "name": "Lokesh"
+        },
+        {
+            "name": "Testing Agent 2"
+        }
+    ]
+}
 ---------------------------------------------------------------
+API : http://192.168.2.104:8081/service_status_update (POST)
+
+payload:
+{
+    "service_id": "40",
+    "status": "1",
+    "vendor_name": "Lokesh"
+}
+
+response:
+{
+    "message": "Service status and vendor updated successfully."
+}
+---------------------------------------------------------------
+
+API - http://192.168.2.104:8081/get-confirm-request (GET)
+response:
+{
+    "success": true,
+    "data": [
+        {
+            "service_id": 38,
+            "userID": 1,
+            "service_description": "Need a sweeper for society",
+            "location": "Pune",
+            "status": 2,
+            "created_at": "2025-03-04T20:39:26.000Z",
+            "complete_status": 1,
+            "vendor_alloted": "Rishabh"
+        },
+        {
+            "service_id": 39,
+            "userID": 3,
+            "service_description": "Need Tank Cleaner",
+            "location": "Raipur",
+            "status": 2,
+            "created_at": "2025-03-05T23:14:10.000Z",
+            "complete_status": 1,
+            "vendor_alloted": "Testing Agent 2"
+        }
+    ],
+    "totalCount": 2,
+    "currentPage": 1,
+    "totalPages": 1
+}
+---------------------------------------------------------------
+
+API : http://192.168.2.104:8081/dashboard-stats (GET)
+
+response:
+{
+    "success": true,
+    "data": {
+        "total_active_vendors": 2,
+        "total_requests": 4,
+        "confirmed_requests": 2,
+        "closed_requests": 1
+    }
+}
+---------------------------------------------------------------
+API : http://192.168.2.104:8081/get-closed-request (GET)
+
+response:
+{
+    "success": true,
+    "data": [
+        {
+            "service_id": 37,
+            "userID": 1,
+            "service_description": "Chamber Cleaner",
+            "location": "Bilaspur",
+            "status": 3,
+            "created_at": "2025-03-04T20:38:15.000Z",
+            "complete_status": 2,
+            "vendor_alloted": "Akash"
+        }
+    ],
+    "totalCount": 1,
+    "currentPage": 1,
+    "totalPages": 1
+}
+---------------------------------------------------------------
+API : http://192.168.2.104:8081/admin-login (POST)
+
+payload:
+{  
+    "email":"viplove@gmail.com",
+    "password":"Viplove@1109"
+}
+
+response:
+{
+    "message": "Login successful",
+    "adminId": 1
+}
+---------------------------------------------------------------
+
+API - http://192.168.2.104:8081/get-userid-services (POST)
+payload:
+{
+    "user_id":"3"
+}
+response:
+{
+    "services": [
+        {
+            "service_id": 39,
+            "userID": 3,
+            "service_description": "Need Tank Cleaner",
+            "location": "Raipur",
+            "status": 2,
+            "created_at": "2025-03-05T23:14:10.000Z",
+            "complete_status": 1,
+            "vendor_alloted": "Testing Agent 2"
+        },
+        {
+            "service_id": 40,
+            "userID": 3,
+            "service_description": "Need Assistant for Hotel",
+            "location": "Mumbai",
+            "status": 1,
+            "created_at": "2025-03-05T23:22:16.000Z",
+            "complete_status": 0,
+            "vendor_alloted": "Lokesh"
+        }
+    ]
+}
+---------------------------------------------------------------
+
+API: http://192.168.2.104:8081/delete_vendor/15
+response:
+{
+    "message": "Vendor deleted successfully"
+}
+
+---------------------------------------------------------------
+---------------------------------------------------------------
+
+Status Indication
+0 - Pending 
+1 - Alloted
+2 - Completed
+3 - Cancelled / Uncomplete / Closed
+4 - In Progress

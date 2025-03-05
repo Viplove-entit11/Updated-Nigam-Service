@@ -84,6 +84,7 @@ const VendorList = () => {
           <thead>
             <tr>
               <th>#</th>
+              <th>Vendor_ID</th>
               <th>Name</th>
               <th>Contact Number</th>
               <th>Charges</th>
@@ -95,6 +96,7 @@ const VendorList = () => {
             {vendors.map((vendor, index) => (
               <tr key={vendor.id}>
                 <td>{index + 1}</td>
+                <td>{vendor.id}</td>
                 <td>{vendor.name}</td>
                 <td>{vendor.contact_number}</td>
                 <td>{vendor.charges}</td>
