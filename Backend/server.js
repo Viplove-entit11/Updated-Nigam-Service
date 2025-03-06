@@ -34,11 +34,13 @@ API Routes
 
 // default backend route
 app.get("/", (request, response) => {
+    console.log("'/' API Called");
   return response.json("Coming From Backend");
 });
 
 // API Route for admin login
 app.post("/admin-login", (req, res) => {
+    console.log("'/admin-login' API Called");
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -64,6 +66,8 @@ app.post("/admin-login", (req, res) => {
 
 // API route for dashboard data
 app.get("/dashboard-stats", (req, res) => {
+    console.log("'/dashboard-stats' API Called");
+
   const query = `
       SELECT 
         (SELECT COUNT(*) FROM vendors WHERE status = 1) AS total_active_vendors,
@@ -85,6 +89,8 @@ app.get("/dashboard-stats", (req, res) => {
 
 // endpoint to get vendors data from vendors table
 app.get("/vendors_data", (request, response) => {
+    console.log("'/vendors_data' API Called");
+
   const sql = "SELECT * FROM vendors";
   db.query(sql, (err, data) => {
     if (err) {
@@ -145,6 +151,8 @@ async function sendSmsToUser(mobile, otp) {
 
 // API Route to Send OTP
 app.post("/send-otp", async (req, res) => {
+    console.log("'/send-otp' API Called");
+
   const { username, mobile } = req.body;
 
   if (!mobile) {
@@ -217,6 +225,8 @@ app.post("/send-otp", async (req, res) => {
 
 // API Route for vendor registration.
 app.post("/register_vendor", (request, response) => {
+    console.log("'/register_vendor' API Called");
+
   // Extract Data from Payload
   const { vendor_name, vendorCharges, vendorContact } = request.body;
 
@@ -271,6 +281,8 @@ app.post("/register_vendor", (request, response) => {
 
 // api for service_request
 app.post("/service-request", (req, res) => {
+    console.log("'/service-request' API Called");
+
   const { userId, description, location } = req.body;
 
   // Validate the incoming data
@@ -296,6 +308,8 @@ app.post("/service-request", (req, res) => {
 
 //   API for fetching all service requests
 app.get("/get-requests", (request, response) => {
+    console.log("'/get-requests' API Called");
+
   const { page = 1, limit = 10 } = request.query; // Default: page 1, limit 10
   const offset = (page - 1) * limit;
 
@@ -337,6 +351,8 @@ app.get("/get-requests", (request, response) => {
 
 // API route to update status of request based on confirmation Status=> agree (1) / disagree (0) of user (for mobile app)
 app.post("/confirmation-service-status", (req, res) => {
+    console.log("'/confirmation-service-status' API Called");
+
   const { userId, serviceId, confirmationStatus } = req.body;
 
   // Validate request body
@@ -386,6 +402,8 @@ app.post("/confirmation-service-status", (req, res) => {
 
 // API Route to fetch vendors name
 app.get("/fetch_vendors_name", (req, res) => {
+    console.log("'/fetch_vendors_name' API Called");
+
   const query = "SELECT name FROM vendors WHERE status = 1";
 
   db.query(query, (error, result) => {
@@ -403,6 +421,8 @@ app.get("/fetch_vendors_name", (req, res) => {
 
 // API Route to updated service status
 app.post("/service_status_update", (request, response) => {
+    console.log("'/service_status_update' API Called");
+
   const { service_id, status, vendor_name } = request.body; // Extract service_id, status, and vendor_name
 
   if (!service_id || status === undefined || !vendor_name) {
@@ -434,6 +454,7 @@ app.post("/service_status_update", (request, response) => {
 
 // API Route for returning the confirm request
 app.get("/get-confirm-request", (request, response) => {
+    console.log("/get-confirm-request API Called");
   const { page = 1, limit = 10 } = request.query; // Default: page 1, 10 items per page
   const offset = (page - 1) * limit;
 
@@ -476,6 +497,7 @@ app.get("/get-confirm-request", (request, response) => {
 
 // API Route for returnig the closed request
 app.get("/get-closed-request", (request, response) => {
+    console.log("/get-closed-request API Called");
   const { page = 1, limit = 10 } = request.query; // Default: page 1, 10 items per page
   const offset = (page - 1) * limit;
 
@@ -518,6 +540,7 @@ app.get("/get-closed-request", (request, response) => {
 
 // update-complete status
 app.post("/update-complete-status", (request, response) => {
+    console.log("/update-complete-status API Called");
   const { userId, serviceId, confirmationStatus } = request.body;
 
   // Validate request body
@@ -580,6 +603,8 @@ app.post("/update-complete-status", (request, response) => {
 
 // API Route for getting all services based on UserID
 app.post("/get-userid-services", (req, res) => {
+    console.log("'/get-userid-services' API Called");
+
   const { user_id } = req.body; // Get user_id from POST request
 
   if (!user_id) {
@@ -607,6 +632,7 @@ app.post("/get-userid-services", (req, res) => {
 
 // API Route for deleting the Vendor from records based on vendor_ID
 app.delete("/delete_vendor/:id", (req, res) => {
+    console.log("'/delete_vendor/:id' API Called");
   const vendorId = req.params.id;
 
   // Check if the vendor exists
