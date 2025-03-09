@@ -3,7 +3,7 @@ import "./Dashboard.css";
 import { FaUsers, FaTasks } from "react-icons/fa";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import { AiOutlineFileDone } from "react-icons/ai";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -31,31 +31,50 @@ const Dashboard = () => {
     setClosedRequestCount,
     isLoading,
     setIsLoading,
+    isAdminLoggedIn
   } = useAuth();
 
+  const [dashboardLoading, setDashboardLoading] = useState(true);
+
   useEffect(() => {
+    let isMounted = true;
+
     const fetchRequestCount = async () => {
       try {
-        setIsLoading(true);
+        if (!isAdminLoggedIn) return;
+        
+        setDashboardLoading(true);
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}dashboard-stats`
+          `${import.meta.env.VITE_API_URL}dashboard-stats`,
+          {
+            credentials: 'include'
+          }
         );
         if (!response.ok) throw new Error("Network response was not ok");
 
         const data = await response.json();
-        setVendorCount(data.data.total_active_vendors);
-        settotalRequestCount(data.data.total_requests);
-        setClosedRequestCount(data.data.closed_requests);
-        setConfirmRequestCount(data.data.confirmed_requests);
+        if (isMounted) {
+          setVendorCount(data.data.total_active_vendors);
+          settotalRequestCount(data.data.total_requests);
+          setClosedRequestCount(data.data.closed_requests);
+          setConfirmRequestCount(data.data.confirmed_requests);
+        }
       } catch (error) {
         console.error("Error fetching request count:", error);
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setDashboardLoading(false);
+          setIsLoading(false);
+        }
       }
     };
 
     fetchRequestCount();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAdminLoggedIn]);
 
   const chartData = [
     { name: "Total Vendors", count: vendorCount },
@@ -70,7 +89,7 @@ const Dashboard = () => {
   }));
   const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300"];
 
-  if (isLoading) {
+  if (isLoading || dashboardLoading) {
     return (
       <div style={{
         height: "500px",

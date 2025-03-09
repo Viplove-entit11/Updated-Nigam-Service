@@ -8,23 +8,86 @@ const AuthContext = createContext();
 
 // 2. Create Provider Component
 export const AuthProvider = ({ children }) => {
-  const navigate = useNavigate(); // Initialize navigate
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
+  const navigate = useNavigate();
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-    // Check local storage for login state
-    const savedLoginState = localStorage.getItem('isAdminLoggedIn');
-    return savedLoginState === 'true'; // Return true if logged in
-  }); // checking for whether the admin is logged in
+  // Check authentication status on mount only
+  useEffect(() => {
+    let isMounted = true;
+
+    const verifyAuth = async () => {
+      if (!isMounted) return;
+      
+      try {
+        // Only verify if we think we're logged in
+        if (window.location.pathname === '/admin-login') {
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${import.meta.env.VITE_API_URL}verify-auth`, {
+          credentials: 'include',
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (isMounted) {
+            setIsAdminLoggedIn(true);
+            setAdminEmail(data.email);
+          }
+        } else {
+          if (isMounted) {
+            setIsAdminLoggedIn(false);
+            setAdminEmail("");
+            navigate('/admin-login');
+          }
+        }
+      } catch (error) {
+        console.error('Auth verification error:', error);
+        if (isMounted) {
+          setIsAdminLoggedIn(false);
+          setAdminEmail("");
+          navigate('/admin-login');
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    verifyAuth();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [navigate]);
+
+  // Logout function
+  const logout = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}admin-logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        setIsAdminLoggedIn(false);
+        setAdminEmail("");
+        navigate("/admin-login");
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   //   admin credential state
-  const [adminEmail, setAdminEmail] = useState(() => {
-    // Check local storage for admin email
-    const savedAdminEmail = localStorage.getItem('Admin Email');
-    return savedAdminEmail || ""; // Return saved email or empty string
-  });
-  const [adminPassword, setAdminPassword] = useState("");
-
-  // vendor registration data state
   const [vendorName, setVendorName] = useState("");
   const [vendorContact, setVendorContact] = useState("");
   const [vendorCharges, setVendorCharges] = useState("");
@@ -54,24 +117,6 @@ export const AuthProvider = ({ children }) => {
   const [statusChanges, setStatusChanges] = useState({});
   const [showUpdateButton, setShowUpdateButton] = useState({});
   const [currentStatusValue, setCurrentStatusValue] = useState({});
-
-  // Loader state 
-  const [isLoading, setIsLoading] = useState(true);
-
-  // useEffect for always to check isAdminLoggedIn
-  useEffect(() => {
-    // Persist login state to local storage
-    localStorage.setItem('isAdminLoggedIn', isAdminLoggedIn);
-  }, [isAdminLoggedIn]);
-
-
-  // function for logout functionality
-  const logout = () => {
-    setIsAdminLoggedIn(false);
-    localStorage.removeItem('isAdminLoggedIn');
-    navigate("/admin-login"); // Redirect to login page after logout
-  };
-
 
   return (
 

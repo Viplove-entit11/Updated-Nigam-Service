@@ -1,13 +1,23 @@
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 // enabling dotenv
 const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
 
-app.use(cors("*"));
+// Update CORS configuration
+app.use(cors({
+    origin: 'http://localhost:5174', // Your frontend URL
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(cookieParser());
 app.use(express.json());
 
 // creating connection to database
@@ -38,30 +48,80 @@ app.get("/", (request, response) => {
   return response.json("Coming From Backend");
 });
 
+// Verify auth endpoint
+app.get("/verify-auth", (req, res) => {
+    console.log("'/verify-auth' API Called");
+    try {
+        const token = req.cookies.adminToken;
+        
+        if (!token) {
+            return res.status(401).json({ message: 'No token found' });
+        }
+
+        // Verify the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        // Send back the user info
+        res.json({
+            email: decoded.email,
+            success: true
+        });
+    } catch (error) {
+        console.error('Token verification error:', error);
+        res.status(401).json({ message: 'Invalid token' });
+    }
+});
+
 // API Route for admin login
 app.post("/admin-login", (req, res) => {
     console.log("'/admin-login' API Called");
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email and password are required" });
-  }
-
-  const query = "SELECT * FROM admin WHERE email_address = ? AND password = ?";
-  db.query(query, [email, password], (err, results) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ message: "Database error" });
+    if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
     }
 
-    if (results.length === 0) {
-      return res.status(401).json({ message: "Invalid email or password" });
-    }
+    const query = "SELECT * FROM admin WHERE email_address = ? AND password = ?";
+    db.query(query, [email, password], (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ message: "Database error" });
+        }
 
-    res
-      .status(200)
-      .json({ message: "Login successful", adminId: results[0].id });
-  });
+        if (results.length === 0) {
+            return res.status(401).json({ message: "Invalid email or password" });
+        }
+
+        // Create JWT token
+        const token = jwt.sign(
+            { 
+                id: results[0].id,
+                email: results[0].email_address 
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Set HTTP-only cookie
+        res.cookie('adminToken', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
+
+        res.status(200).json({ 
+            message: "Login successful",
+            adminId: results[0].id
+        });
+    });
+});
+
+// Add logout endpoint
+app.post("/admin-logout", (req, res) => {
+    console.log("'/admin-logout' API Called");
+    res.clearCookie('adminToken');
+    res.json({ success: true, message: 'Logged out successfully' });
 });
 
 // API route for dashboard data

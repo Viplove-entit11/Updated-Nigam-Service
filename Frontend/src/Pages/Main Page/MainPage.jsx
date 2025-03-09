@@ -7,21 +7,19 @@ import Sidebar from "../../Components/Sidebar/Sidebar";
 import TotalRequest from "../../Components/Total Request/TotalRequest";
 import VendorData from "../../Components/Vendor Data/VendorData";
 import VendorDetails from "../../Components/Vendor Details/VendorDetails";
-import { useAuth } from "../../Context/Context";
+import ProtectedRoute from "../../Components/ProtectedRoute/ProtectedRoute";
 import "./MainPage.css";
 
 const MainPage = () => {
-  const { isAdminLoggedIn } = useAuth();
-
   return (
-      <div className="main-page">
-        <div className="main-sidebar">
-          <Sidebar />
-        </div>
-        {isAdminLoggedIn && (
+    <div className="main-page">
+      <ProtectedRoute>
+        <>
+          <div className="main-sidebar">
+            <Sidebar />
+          </div>
           <div className="main-content">
             <Navbar />
-            {/* Nested Routes for Content Switching */}
             <Routes>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/VendorRegistration" element={<VendorDetails />} />
@@ -31,8 +29,9 @@ const MainPage = () => {
               <Route path="/closed_request" element={<ClosedRequest />} />
             </Routes>
           </div>
-        )}
-      </div>
+        </>
+      </ProtectedRoute>
+    </div>
   );
 };
 

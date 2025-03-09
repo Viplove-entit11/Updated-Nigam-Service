@@ -23,20 +23,17 @@ const AdminForm = () => {
   const handleAdminLoggin = async (event) => {
     event.preventDefault();
 
-    console.log("Admin email:", adminEmail);
-    console.log("Admin Password:", adminPassword);
-
     try {
-      setIsLoading(true)
-      // Validation for when admin email and password are empty 
+      setIsLoading(true);
       if (!adminEmail || !adminPassword) {
         toast.error("Both email and password are required.");
-        return; // Prevent further execution
+        setIsLoading(false);
+        return;
       }
 
       const response = await fetch(import.meta.env.VITE_API_URL + "admin-login", {
-
         method: "POST",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
         },
@@ -49,19 +46,18 @@ const AdminForm = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("Admin Email", adminEmail);
-        localStorage.setItem("Admin ID", data.adminId);
         setIsAdminLoggedIn(true);
         toast.success("Admin Logged In Successfully");
         navigate("/dashboard");
       } else {
         setIsAdminLoggedIn(false);
         toast.error(data.message || "Admin Login Unsuccessful");
+        setIsLoading(false);
       }
-      setIsLoading(false)
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Something went wrong. Please try again.");
+      setIsLoading(false);
     }
   };
 
