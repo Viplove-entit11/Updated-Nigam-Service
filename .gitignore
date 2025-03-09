@@ -1,9 +1,9 @@
 # frontend related ignore's
 /Frontend/node_modules
-Frontend/.env
+# Frontend/.env
 
 
 
 # backend related ignore's
 /Backend/node_modules
-Backend/.env
+# Backend/.env
