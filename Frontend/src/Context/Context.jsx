@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
 
         const response = await fetch(`${import.meta.env.VITE_API_URL}verify-auth`, {
           credentials: 'include',
+          // credentials: true,
         });
         
         if (response.ok) {

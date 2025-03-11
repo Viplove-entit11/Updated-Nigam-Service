@@ -191,6 +191,8 @@ app.get("/monthly-stats", (req, res) => {
 // endpoint to get vendors data from vendors table
 app.get("/vendors_data", (request, response) => {
     console.log("'/vendors_data' API Called");
+    console.log("Request received:", request.body); // Log incoming request data
+
 
   const sql = "SELECT * FROM vendors";
   db.query(sql, (err, data) => {
@@ -250,9 +252,10 @@ async function sendSmsToUser(mobile, otp) {
   }
 }
 
-// API Route to Send OTP
 app.post("/send-otp", async (req, res) => {
     console.log("'/send-otp' API Called");
+    console.log("Request received:", req.body); // Log incoming request data
+
 
   const { username, mobile } = req.body;
 
@@ -781,6 +784,8 @@ app.delete("/delete_vendor/:id", (req, res) => {
 // need to work on its logic
 
 // APP LISTENING TO PORT 8081
-app.listen(8081, "0.0.0.0", () => {
-  console.log(`Node Server Listening at: ${process.env.SITE_URL}`);
+const PORT = process.env.PORT
+console.log("PORT affected :",PORT)
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Node Server Listening at: http://localhost:${PORT}`);
 });
