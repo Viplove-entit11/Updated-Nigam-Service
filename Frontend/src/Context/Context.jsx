@@ -13,6 +13,9 @@ export const AuthProvider = ({ children }) => {
   const [adminEmail, setAdminEmail] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [dashboardLoading, setDashboardLoading] = useState(false);
+  const [confirmRequestLoading, setConfirmRequestLoading] = useState(false);
+  const [closedRequestLoading, setClosedRequestLoading] = useState(false);
 
   // Check authentication status on mount only
   useEffect(() => {
@@ -187,6 +190,12 @@ export const AuthProvider = ({ children }) => {
 
         // isLoading State for rendering loader on true, 
         isLoading, setIsLoading,
+        dashboardLoading,
+        setDashboardLoading,
+        confirmRequestLoading,
+        setConfirmRequestLoading,
+        closedRequestLoading,
+        setClosedRequestLoading,
       }}
     >
       {children} 

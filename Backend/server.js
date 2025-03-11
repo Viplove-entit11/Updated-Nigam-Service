@@ -9,9 +9,9 @@ dotenv.config();
 
 const app = express();
 
-// Update CORS configuration
+// Update CORS configuration to allow both development ports
 app.use(cors({
-    origin: 'http://localhost:5174', // Your frontend URL
+    origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow both ports
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -144,6 +144,47 @@ app.get("/dashboard-stats", (req, res) => {
         .json({ success: false, message: "Internal server error" });
     }
     return res.status(200).json({ success: true, data: result[0] });
+  });
+});
+
+// New endpoint for monthly request statistics
+app.get("/monthly-stats", (req, res) => {
+  console.log("'/monthly-stats' API Called");
+
+  const query = `
+    SELECT 
+      DATE_FORMAT(created_at, '%b') as month,
+      COUNT(*) as requests,
+      MONTH(created_at) as month_number
+    FROM service_request
+    WHERE YEAR(created_at) = YEAR(CURRENT_DATE())
+    GROUP BY month, month_number
+    ORDER BY month_number;
+  `;
+
+  db.query(query, (error, result) => {
+    if (error) {
+      console.error("Database Error:", error);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Internal server error" 
+      });
+    }
+
+    // Fill in missing months with zero requests
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthlyData = months.map(month => {
+      const found = result.find(r => r.month === month);
+      return {
+        month: month,
+        requests: found ? found.requests : 0
+      };
+    });
+
+    return res.status(200).json({ 
+      success: true, 
+      data: monthlyData 
+    });
   });
 });
 
@@ -374,7 +415,12 @@ app.get("/get-requests", (request, response) => {
   const offset = (page - 1) * limit;
 
   const countQuery = "SELECT COUNT(*) AS total FROM service_request";
-  const dataQuery = "SELECT * FROM service_request LIMIT ? OFFSET ?";
+  const dataQuery = `
+    SELECT sr.*, u.username 
+    FROM service_request sr
+    LEFT JOIN users u ON sr.userID = u.userID
+    LIMIT ? OFFSET ?
+  `;
 
   db.query(countQuery, (countError, countResult) => {
     if (countError) {
@@ -520,7 +566,13 @@ app.get("/get-confirm-request", (request, response) => {
 
   const countQuery =
     "SELECT COUNT(*) AS total FROM service_request WHERE status = 2";
-  const dataQuery = `SELECT * FROM service_request WHERE status = 2 LIMIT ? OFFSET ?`;
+  const dataQuery = `
+    SELECT sr.*, u.username 
+    FROM service_request sr
+    LEFT JOIN users u ON sr.userID = u.userID
+    WHERE sr.status = 2 
+    LIMIT ? OFFSET ?
+  `;
 
   db.query(countQuery, (countError, countResult) => {
     if (countError) {
@@ -530,7 +582,7 @@ app.get("/get-confirm-request", (request, response) => {
         .json({ success: false, message: "Internal server error" });
     }
 
-    const totalCount = countResult[0].total; // Total number of confirmed requests
+    const totalCount = countResult[0].total;
 
     db.query(
       dataQuery,
@@ -546,7 +598,7 @@ app.get("/get-confirm-request", (request, response) => {
         return response.status(200).json({
           success: true,
           data: result,
-          totalCount: totalCount, // Send total count for frontend pagination
+          totalCount: totalCount,
           currentPage: parseInt(page),
           totalPages: Math.ceil(totalCount / limit),
         });
@@ -563,7 +615,13 @@ app.get("/get-closed-request", (request, response) => {
 
   const countQuery =
     "SELECT COUNT(*) AS total FROM service_request WHERE status = 3";
-  const dataQuery = `SELECT * FROM service_request WHERE status = 3 LIMIT ? OFFSET ?`;
+  const dataQuery = `
+    SELECT sr.*, u.username 
+    FROM service_request sr
+    LEFT JOIN users u ON sr.userID = u.userID
+    WHERE sr.status = 3 
+    LIMIT ? OFFSET ?
+  `;
 
   db.query(countQuery, (countError, countResult) => {
     if (countError) {
@@ -573,7 +631,7 @@ app.get("/get-closed-request", (request, response) => {
         .json({ success: false, message: "Internal server error" });
     }
 
-    const totalCount = countResult[0].total; // Total number of confirmed requests
+    const totalCount = countResult[0].total;
 
     db.query(
       dataQuery,
@@ -589,7 +647,7 @@ app.get("/get-closed-request", (request, response) => {
         return response.status(200).json({
           success: true,
           data: result,
-          totalCount: totalCount, // Send total count for frontend pagination
+          totalCount: totalCount,
           currentPage: parseInt(page),
           totalPages: Math.ceil(totalCount / limit),
         });

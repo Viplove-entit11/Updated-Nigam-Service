@@ -5,8 +5,8 @@ import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import { AiOutlineFileDone } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import {
-  BarChart,
-  Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   Tooltip,
@@ -15,6 +15,8 @@ import {
   PieChart,
   Pie,
   Cell,
+  CartesianGrid,
+  Area,
 } from "recharts";
 import { useAuth } from "../../Context/Context";
 import Loader from "../Loader/Loader";
@@ -29,67 +31,95 @@ const Dashboard = () => {
     setConfirmRequestCount,
     closedRequestCount,
     setClosedRequestCount,
-    isLoading,
-    setIsLoading,
+    dashboardLoading,
+    setDashboardLoading,
     isAdminLoggedIn
   } = useAuth();
 
-  const [dashboardLoading, setDashboardLoading] = useState(true);
+  // State for monthly data
+  const [monthlyData, setMonthlyData] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
 
-    const fetchRequestCount = async () => {
+    const fetchDashboardData = async () => {
       try {
         if (!isAdminLoggedIn) return;
         
         setDashboardLoading(true);
-        const response = await fetch(
+        
+        // Fetch dashboard stats
+        const statsResponse = await fetch(
           `${import.meta.env.VITE_API_URL}dashboard-stats`,
           {
             credentials: 'include'
           }
         );
-        if (!response.ok) throw new Error("Network response was not ok");
+        
+        if (!statsResponse.ok) {
+          throw new Error("Failed to fetch dashboard stats");
+        }
 
-        const data = await response.json();
-        if (isMounted) {
-          setVendorCount(data.data.total_active_vendors);
-          settotalRequestCount(data.data.total_requests);
-          setClosedRequestCount(data.data.closed_requests);
-          setConfirmRequestCount(data.data.confirmed_requests);
+        const statsData = await statsResponse.json();
+        
+        // Fetch monthly stats
+        const monthlyResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}monthly-stats`,
+          {
+            credentials: 'include'
+          }
+        );
+
+        if (!monthlyResponse.ok) {
+          throw new Error("Failed to fetch monthly stats");
+        }
+
+        const monthlyData = await monthlyResponse.json();
+
+        if (isMounted && statsData.success) {
+          setVendorCount(statsData.data.total_active_vendors);
+          settotalRequestCount(statsData.data.total_requests);
+          setClosedRequestCount(statsData.data.closed_requests);
+          setConfirmRequestCount(statsData.data.confirmed_requests);
+          
+          if (monthlyData.success) {
+            setMonthlyData(monthlyData.data);
+          }
         }
       } catch (error) {
-        console.error("Error fetching request count:", error);
+        console.error("Error fetching dashboard data:", error);
       } finally {
         if (isMounted) {
           setDashboardLoading(false);
-          setIsLoading(false);
         }
       }
     };
 
-    fetchRequestCount();
+    fetchDashboardData();
 
     return () => {
       isMounted = false;
     };
   }, [isAdminLoggedIn]);
 
-  const chartData = [
-    { name: "Total Vendors", count: vendorCount },
-    { name: "Total Requests", count: totalRequestCount },
-    { name: "Confirmed Requests", count: confirmRequestCount },
-    { name: "Closed Requests", count: closedRequestCount },
+  // Data for request status distribution
+  const requestStatusData = [
+    { name: "Confirmed", value: confirmRequestCount, color: "#FFB347" },  // Pastel Orange
+    { name: "Closed", value: closedRequestCount, color: "#FFA07A" },     // Light Salmon
+    { name: "Pending", value: totalRequestCount - (confirmRequestCount + closedRequestCount), color: "#F4D03F" }  // Sunflower Yellow
   ];
 
-  const doughnutData = chartData.map(({ name, count }) => ({
-    name,
-    value: count,
-  }));
-  const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300"];
+  const chartStyles = {
+    title: {
+      fontSize: '1.5rem',
+      fontWeight: '600',
+      color: '#333',
+      textAlign: 'center',
+      marginBottom: '20px'
+    }
+  };
 
-  if (isLoading || dashboardLoading) {
+  if (dashboardLoading) {
     return (
       <div style={{
         height: "500px",
@@ -102,89 +132,131 @@ const Dashboard = () => {
     );
   }
 
+  const dashboardItems = [
+    {
+      label: "Total Vendors",
+      value: vendorCount,
+      icon: <FaUsers className="vendor-icon"/>,
+      link: "/vendor_list",
+    },
+    {
+      label: "Total Requests",
+      value: totalRequestCount,
+      icon: <FaTasks className="total-request-icon"/>,
+      link: "/total_request",
+    },
+    {
+      label: "Confirm Requests",
+      value: confirmRequestCount,
+      icon: <IoCheckmarkDoneCircleSharp className="confirm-request-icon" />,
+      link: "/confirm_request",
+    },
+    {
+      label: "Closed Requests",
+      value: closedRequestCount,
+      icon: <AiOutlineFileDone className="closed-request-icon" />,
+      link: "/closed_request",
+    },
+  ];
+
   return (
     <div className="dashboard">
       <div className="dashboard-stats">
-        {[
-          {
-            label: "Total Vendors",
-            value: vendorCount,
-            icon: <FaUsers className="vendor-icon"/>,
-            link: "/vendor_list",
-          },
-          {
-            label: "Total Requests",
-            value: totalRequestCount,
-            icon: <FaTasks className="total-request-icon"/>,
-            link: "/total_request",
-          },
-          {
-            label: "Confirm Requests",
-            value: confirmRequestCount,
-            icon: <IoCheckmarkDoneCircleSharp className="confirm-request-icon" />,
-            link: "/confirm_request",
-          },
-          {
-            label: "Closed Requests",
-            value: closedRequestCount,
-            icon: <AiOutlineFileDone className="closed-request-icon" />,
-            link: "/closed_request",
-          },
-        ].map(({ label, value, icon, link }, index) => (
+        {dashboardItems.map((item, index) => (
           <div key={index} className={`div${index + 1}`}>
             <div className="div-text mb-2">
-              <span>{label}</span>
-              <span className="dash-icon">{icon}</span>
+              <span>{item.label}</span>
+              <span className="dash-icon">{item.icon}</span>
             </div>
             <div className="div-value">
-              <span>{value}</span>
+              <span>{item.value}</span>
             </div>
             <div className="div-link">
-              <Link to={link}>Get {label}</Link>
+              <Link to={item.link}>Get {item.label}</Link>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="charts-container d-flex">
+      <div className="charts-container">
         <div className="chart-item">
-          <h5>Request Statistics</h5>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              data={chartData}
-              margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
+          <h5 style={chartStyles.title}>Monthly Service Request Trends</h5>
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart
+              data={monthlyData}
+              margin={{ top: 20, right: 20, left: 0, bottom: 20 }}
             >
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="count" fill="#8884d8" barSize={50} />
-            </BarChart>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis 
+                dataKey="month" 
+                tick={{ fill: '#666', fontSize: 12 }}
+                interval={0}
+                padding={{ left: 20, right: 20 }}
+              />
+              <YAxis 
+                tick={{ fill: '#666', fontSize: 12 }}
+                axisLine={{ stroke: '#E0E0E0' }}
+                tickLine={{ stroke: '#E0E0E0' }}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: '#fff',
+                  border: '1px solid #E0E0E0',
+                  borderRadius: '4px'
+                }}
+              />
+              <Legend 
+                verticalAlign="top" 
+                height={36}
+                iconType="circle"
+              />
+              <Line 
+                type="monotone" 
+                dataKey="requests" 
+                name="Service Requests"
+                stroke="#2196F3"
+                strokeWidth={2}
+                dot={{ fill: '#2196F3', r: 4 }}
+                activeDot={{ r: 6 }}
+              />
+            </LineChart>
           </ResponsiveContainer>
         </div>
 
         <div className="chart-item">
-          <h5>Request Distribution</h5>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
+          <h5 style={chartStyles.title}>Request Status Overview</h5>
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
               <Pie
-                data={doughnutData}
+                data={requestStatusData}
                 dataKey="value"
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={100}
-                label
+                outerRadius={130}
+                label={({name, percent}) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                labelLine={false}
               >
-                {doughnutData.map((entry, index) => (
+                {requestStatusData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
+                    fill={entry.color}
                   />
                 ))}
               </Pie>
-              <Tooltip />
-              <Legend />
+              <Tooltip 
+                formatter={(value, name) => [`${value} Requests`, name]}
+                contentStyle={{
+                  backgroundColor: '#fff',
+                  border: '1px solid #E0E0E0',
+                  borderRadius: '4px'
+                }}
+              />
+              <Legend 
+                verticalAlign="bottom" 
+                height={36}
+                iconType="circle"
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
