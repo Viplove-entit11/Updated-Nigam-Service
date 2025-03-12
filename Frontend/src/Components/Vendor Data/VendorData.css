@@ -1,10 +1,69 @@
 .vendor-list{
-    padding: 30px 20px ;
-    border: 1px solid #ccc;
-    margin: 30px;
-    height: 100%;
-    overflow-y: scroll;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+.vendor-list h5 {
+    color: #333;
+    font-weight: 600;
+}
+
+.table {
+    margin-top: 1rem;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    color: #495057;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: 0.9rem;
+    color: #212529;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.form-select {
+    min-width: 100px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.text-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.text-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.btn-danger {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.25rem 0.5rem;
+}
+
+.table-responsive {
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
 .active-vendor{
     border: green;
     background-color: var(--complete-background-color);

@@ -783,6 +783,33 @@ app.delete("/delete_vendor/:id", (req, res) => {
 // API For returning the data from service_request for mobile Application
 // need to work on its logic
 
+// API Route for updating vendor status
+app.post("/update_vendor_status", (req, res) => {
+    console.log("'/update_vendor_status' API Called");
+    const { vendorId, status } = req.body;
+
+    if (!vendorId || status === undefined) {
+        return res.status(400).json({ message: "Vendor ID and status are required." });
+    }
+
+    const query = "UPDATE vendors SET status = ? WHERE id = ?";
+    db.query(query, [status, vendorId], (error, result) => {
+        if (error) {
+            console.error("Database error:", error);
+            return res.status(500).json({ message: "Database error", error });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Vendor not found" });
+        }
+
+        res.json({
+            success: true,
+            message: "Vendor status updated successfully"
+        });
+    });
+});
+
 // APP LISTENING TO PORT 8081
 const PORT = process.env.PORT
 console.log("PORT affected :",PORT)

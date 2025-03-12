@@ -5,10 +5,10 @@ import { MdDelete } from "react-icons/md";
 import { useAuth } from "../../Context/Context";
 import Loader from "../Loader/Loader";
 
-
 const VendorList = () => {
   // state for vendors details
   const [vendors, setVendors] = useState([]);
+  const [updatingStatus, setUpdatingStatus] = useState(null);
 
   // loading state from context 
   const {isLoading, setIsLoading} = useAuth();
@@ -64,6 +64,36 @@ const VendorList = () => {
     }
   };
 
+  // function to handle status update
+  const handleStatusUpdate = async (vendorId, newStatus) => {
+    setUpdatingStatus(vendorId);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}update_vendor_status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          vendorId,
+          status: newStatus,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(data.message);
+        fetchVendors();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error('Error updating status:', error);
+      toast.error('Failed to update status');
+    } finally {
+      setUpdatingStatus(null);
+    }
+  };
+
   if (isLoading) {
     return (
       <div style={{
@@ -76,18 +106,19 @@ const VendorList = () => {
       </div>
     );
   }
+
   return (
     <div className="vendor-list">
-      <h5>Vendors List</h5>
-      
-        <table className="table table-striped">
-          <thead>
+      <h5 className="mb-4">Vendors List</h5>
+      <div className="table-responsive">
+        <table className="table table-hover">
+          <thead className="table-light">
             <tr>
               <th>#</th>
-              <th>Vendor_ID</th>
+              <th>Vendor ID</th>
               <th>Name</th>
               <th>Contact Number</th>
-              <th>Charges</th>
+              <th>Charges (₹)</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -99,22 +130,31 @@ const VendorList = () => {
                 <td>{vendor.id}</td>
                 <td>{vendor.name}</td>
                 <td>{vendor.contact_number}</td>
-                <td>{vendor.charges}</td>
+                <td>₹{vendor.charges}</td>
                 <td>
-                  {vendor.status === 1 ? (
-                    <span className="active-vendor">Active</span>
-                  ) : (
-                    <span className="inactive-vendor">Inactive</span>
-                  )}
+                  <select 
+                    className={`form-select form-select-sm w-auto ${vendor.status === 1 ? 'text-success' : 'text-danger'}`}
+                    value={vendor.status}
+                    onChange={(e) => handleStatusUpdate(vendor.id, parseInt(e.target.value))}
+                    disabled={updatingStatus === vendor.id}
+                  >
+                    <option value={1}>Active</option>
+                    <option value={0}>Inactive</option>
+                  </select>
                 </td>
                 <td>
-                <MdDelete  style={{color:"red", fontSize:"25px", cursor:"pointer"}}  onClick={() => handleDelete(vendor.id)} />
+                  <button 
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDelete(vendor.id)}
+                  >
+                    <MdDelete size={18} /> Delete
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      
+      </div>
     </div>
   );
 };
