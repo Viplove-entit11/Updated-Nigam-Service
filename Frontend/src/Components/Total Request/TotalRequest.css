@@ -82,6 +82,14 @@
   border: 1px solid #3f51b5;
 }
 
+.request_status.closed-by-citizen {
+  background-color: #808080;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
 /* Complete Status Badges */
 .complete-status-completed {
   background-color: #e8f5e9;
@@ -105,6 +113,15 @@
   display: inline-block;
   min-width: 100px;
   text-align: center;
+}
+
+.complete-status-closed {
+  background-color: #ff6b6b;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 /* Form Controls */
@@ -173,6 +190,7 @@
     display: block;
     overflow-x: auto;
     white-space: nowrap;
+    height: 600px;
   }
   
   .table thead th,

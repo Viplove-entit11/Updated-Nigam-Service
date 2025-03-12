@@ -480,7 +480,7 @@ app.post("/confirmation-service-status", (req, res) => {
   // Determine the new status based on confirmationStatus
   let newStatus;
   if (confirmationStatus === 0) {
-    newStatus = 3; // Uncomplete/Closed
+    newStatus = 5; // Uncomplete/Closed by user
   } else if (confirmationStatus === 1) {
     newStatus = 4; // In Progress
   } else {

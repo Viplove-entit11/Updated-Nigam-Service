@@ -28,7 +28,9 @@ const TotalRequest = () => {
   const fetchAllRequest = async (page = 1) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}get-requests?page=${page}&limit=${limit}`
+        `${
+          import.meta.env.VITE_API_URL
+        }get-requests?page=${page}&limit=${limit}`
       );
       if (!response.ok) throw new Error("Failed to fetch service requests.");
 
@@ -229,7 +231,7 @@ const TotalRequest = () => {
                 <th>Alloted Vendor</th>
                 <th>Location</th>
                 <th>Status</th>
-                <th>Created At</th>
+                <th>DD-MM-YY HH:MM</th>
                 <th>Complete Status</th>
               </tr>
             </thead>
@@ -237,11 +239,13 @@ const TotalRequest = () => {
               {totalRequestData.map((request) => (
                 <tr key={request.service_id}>
                   <td>{request.service_id}</td>
-                  <td>{request.username || 'N/A'}</td>
+                  <td>{request.username || "N/A"}</td>
                   <td>{request.service_description}</td>
                   <td>
                     {request.vendor_alloted ? (
-                      <span className="vendor-name">{request.vendor_alloted}</span>
+                      <span className="vendor-name">
+                        {request.vendor_alloted}
+                      </span>
                     ) : (
                       <div className="d-flex align-items-center gap-2">
                         <select
@@ -283,7 +287,9 @@ const TotalRequest = () => {
                           ? "completed"
                           : request.status === 3
                           ? "incompleted"
-                          : "inprogress"
+                          : request.status === 4
+                          ? "inprogress"
+                          : "closed-by-citizen"
                       }`}
                     >
                       {request.status === 0
@@ -294,7 +300,9 @@ const TotalRequest = () => {
                         ? "Completed"
                         : request.status === 3
                         ? "Closed"
-                        : "In Progress"}
+                        : request.status === 4
+                        ? "In Progress"
+                        : "Closed By Citizen"}
                     </span>
                   </td>
                   <td>{new Date(request.created_at).toLocaleString()}</td>
@@ -307,15 +315,24 @@ const TotalRequest = () => {
                       <span className="complete-status-incompleted">
                         Incomplete
                       </span>
+                    ) : request.status === 5 ? (
+                      <span className="complete-status-closed">
+                        Closed by Citizen
+                      </span>
                     ) : (
                       <div className="d-flex align-items-center gap-2">
                         <select
                           className="form-control"
                           value={statusChanges[request.service_id] || ""}
                           onChange={(e) =>
-                            handleStatusChange(request.service_id, e.target.value)
+                            handleStatusChange(
+                              request.service_id,
+                              e.target.value
+                            )
                           }
-                          disabled={!(request.status === 1 || request.status === 4)}
+                          disabled={
+                            !(request.status === 1 || request.status === 4) || request.status === 5
+                          }
                         >
                           <option value="">Set Status</option>
                           <option value="2">Complete</option>
@@ -326,7 +343,10 @@ const TotalRequest = () => {
                           <button
                             className="btn btn-primary"
                             onClick={() =>
-                              handleUpdateStatus(request.service_id, request.userID)
+                              handleUpdateStatus(
+                                request.service_id,
+                                request.userID
+                              )
                             }
                           >
                             Update
