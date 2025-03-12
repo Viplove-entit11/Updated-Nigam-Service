@@ -11,7 +11,8 @@ const app = express();
 
 // Update CORS configuration to allow both development ports
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow both ports
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'], // Allow both ports
+    // origin: ['http://192.168.2.28:3000',],// Use this when running on network and change the frontend port to 3000
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -815,4 +816,6 @@ const PORT = process.env.PORT
 console.log("PORT affected :",PORT)
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Node Server Listening at: http://localhost:${PORT}`);
+  // console.log(`Backend running on http://0.0.0.0:${PORT}`); // when using network
+  
 });

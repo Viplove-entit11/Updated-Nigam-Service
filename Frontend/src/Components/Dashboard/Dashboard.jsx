@@ -105,8 +105,8 @@ const Dashboard = () => {
   // Data for request status distribution
   const requestStatusData = [
     { name: "Confirmed", value: confirmRequestCount, color: "#FFB347" },  // Pastel Orange
-    { name: "Closed", value: closedRequestCount, color: "#FFA07A" },     // Light Salmon
-    { name: "Pending", value: totalRequestCount - (confirmRequestCount + closedRequestCount), color: "#F4D03F" }  // Sunflower Yellow
+    { name: "Closed", value: closedRequestCount, color: "#008271" },     // Light Salmon
+    { name: "Pending", value: totalRequestCount - (confirmRequestCount + closedRequestCount), color: "#299CDB" }  // Sunflower Yellow
   ];
 
   const chartStyles = {
