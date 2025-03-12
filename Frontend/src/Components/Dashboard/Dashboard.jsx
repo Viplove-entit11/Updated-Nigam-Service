@@ -38,6 +38,12 @@ const Dashboard = () => {
 
   // State for monthly data
   const [monthlyData, setMonthlyData] = useState([]);
+  const [pendingServices, setPendingServices] = useState([]);
+  const [isTableLoading, setIsTableLoading] = useState(true);
+  const [tableError, setTableError] = useState(null);
+  const [vendors, setVendors] = useState([]);
+  const [isVendorsLoading, setIsVendorsLoading] = useState(true);
+  const [vendorsError, setVendorsError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -100,6 +106,65 @@ const Dashboard = () => {
     return () => {
       isMounted = false;
     };
+  }, [isAdminLoggedIn]);
+
+  // Add new useEffect for pending services
+  useEffect(() => {
+    const fetchPendingServices = async () => {
+      try {
+        setIsTableLoading(true);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}pending-services`, {
+          credentials: 'include'
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+          setPendingServices(data.data || []);
+        } else {
+          setTableError(data.message || 'Failed to fetch pending services');
+        }
+      } catch (err) {
+        setTableError('Failed to fetch pending services');
+        console.error('Error:', err);
+      } finally {
+        setIsTableLoading(false);
+      }
+    };
+
+    if (isAdminLoggedIn) {
+      fetchPendingServices();
+    }
+  }, [isAdminLoggedIn]);
+
+  // Add new useEffect for vendors data
+  useEffect(() => {
+    const fetchVendors = async () => {
+      try {
+        setIsVendorsLoading(true);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}vendors_data`, {
+          credentials: 'include'
+        });
+        const data = await response.json();
+        console.log('Vendors API Response:', data);
+        
+        if (data.success) {
+          console.log('Setting vendors data:', data.vendors);
+          setVendors(data.vendors || []);
+        } else {
+          console.error('API Error:', data.message);
+          setVendorsError(data.message || 'Failed to fetch vendors data');
+        }
+      } catch (err) {
+        console.error('Fetch Error:', err);
+        setVendorsError('Failed to fetch vendors data');
+      } finally {
+        setIsVendorsLoading(false);
+      }
+    };
+
+    if (isAdminLoggedIn) {
+      fetchVendors();
+    }
   }, [isAdminLoggedIn]);
 
   // Data for request status distribution
@@ -259,6 +324,112 @@ const Dashboard = () => {
               />
             </PieChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Add Tables Section */}
+      <div className="tables-section">
+        {/* Pending Services Table */}
+        <div className="table-container">
+          <h4 className="table-title text-xl font-semibold">Pending Services</h4>
+          
+          {isTableLoading ? (
+            <div className="table-loading">
+              <Loader />
+            </div>
+          ) : tableError ? (
+            <div className="table-error">
+              <p>{tableError}</p>
+            </div>
+          ) : (
+            <div className="table-wrapper">
+              <table className="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>Service ID</th>
+                    <th>Description</th>
+                    <th>Username</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {!pendingServices || pendingServices.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" className="text-center">
+                        No pending services found
+                      </td>
+                    </tr>
+                  ) : (
+                    pendingServices.map((service) => (
+                      <tr key={service.service_id}>
+                        <td>{service.service_id}</td>
+                        <td>{service.service_description}</td>
+                        <td>{service.username}</td>
+                        <td>{service.location}</td>
+                        <td>
+                          <span className={`dashboard-status-${service.status}`}>
+                            {service.status === 0 ? 'Pending' : 'N/A'}
+                          </span>
+                        </td>
+                        <td>{new Date(service.created_at).toLocaleDateString()}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {/* Second Table */}
+        <div className="table-container">
+          <h4 className="table-title text-xl font-semibold">Vendors Information</h4>
+          {isVendorsLoading ? (
+            <div className="table-loading">
+              <Loader />
+            </div>
+          ) : vendorsError ? (
+            <div className="table-error">
+              <p>{vendorsError}</p>
+            </div>
+          ) : (
+            <div className="table-wrapper">
+              <table className="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Charges</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {!vendors || vendors.length === 0 ? (
+                    <tr>
+                      <td colSpan="4" className="text-center">
+                        No vendors found (Length: {vendors ? vendors.length : 0})
+                      </td>
+                    </tr>
+                  ) : (
+                    vendors.map((vendor) => (
+                      <tr key={vendor.id}>
+                        <td>{vendor.name}</td>
+                        <td>{vendor.contact_number}</td>
+                        <td>₹{vendor.charges}</td>
+                        <td>
+                          <span className={`dashboard-status-${vendor.status}`}>
+                            {vendor.status === 1 ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

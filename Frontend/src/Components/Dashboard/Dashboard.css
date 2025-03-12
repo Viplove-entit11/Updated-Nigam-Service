@@ -127,3 +127,215 @@
         padding: 15px;
     }
 }
+
+/* Tables Section Styles */
+.tables-section {
+  margin-top: 2rem;
+  display: flex;
+  gap: 40px;
+  flex-wrap: nowrap;
+  padding: 0 10px;
+}
+
+.table-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  margin: 10px 0;
+}
+
+.table-title {
+  color: #333;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.dashboard-table th {
+  background-color: #f8f9fa;
+  color: #6b7280;
+  font-weight: 600;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 2px solid #e5e7eb;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.dashboard-table td {
+  padding: 12px 16px;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+}
+
+.dashboard-table tbody tr:hover {
+  background-color: #f9fafb;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Loading and Error States */
+.table-loading,
+.table-error {
+  padding: 2rem;
+  text-align: center;
+}
+
+.table-error {
+  color: #ef4444;
+}
+
+/* Responsive Table */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 1024px) {
+  .tables-section {
+    flex-direction: column;
+  }
+  
+  .table-container {
+    width: 100%;
+  }
+}
+
+/* Custom Scrollbar for Table */
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Status Badge Styles */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.status-0 {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+
+.status-1, .status-4 {
+  background-color: #DBEAFE;
+  color: #1E40AF;
+}
+
+.status-2 {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+.status-3 {
+  background-color: #E5E7EB;
+  color: #374151;
+}
+
+.status-5 {
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+
+/* Hover effect for status badges */
+.status-badge:hover {
+  filter: brightness(0.95);
+}
+
+/* Make sure table cells with badges are properly aligned */
+.dashboard-table td:has(.dashboard-status-0) {
+  white-space: nowrap;
+  text-align: left;
+}
+
+/* Dashboard Status Styles */
+.dashboard-status-0 {
+  background-color: #c7e0ee;
+  color: rgb(32, 32, 32);
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-block;
+  text-align: left;
+  min-width: 100px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.dashboard-status-1 {
+  background-color: #D1FAE5;  /* Light green for active status */
+  color: #065F46;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-block;
+  text-align: center;
+  min-width: 100px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.dashboard-status-2 {
+  background-color: #FEE2E2;  /* Light red for inactive status */
+  color: #991B1B;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-block;
+  text-align: center;
+  min-width: 100px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.dashboard-status-0:hover,
+.dashboard-status-1:hover,
+.dashboard-status-2:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Align charges to right and add currency formatting */
+.dashboard-table td:nth-child(3) {
+  text-align: right;
+  font-family: monospace;
+  font-weight: 500;
+}
+
+/* Center align the status column */
+.dashboard-table td:nth-child(5) {
+  /* text-align: center; */
+}
