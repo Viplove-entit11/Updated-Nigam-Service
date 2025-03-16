@@ -11,12 +11,13 @@ import AdminLogin from "./Pages/Admin Login/AdminLogin";
 import MainPage from "./Pages/Main Page/MainPage";
 import { ToastContainer } from "react-toastify";
 import { useAuth } from "./Context/Context";
+import Loader from "./Components/Loader/Loader";
 
 const App = () => {
   const { isAdminLoggedIn, isLoading } = useAuth();
 
   if (isLoading) {
-    return <div>Loading...</div>; // Or your loading component
+    return <div className="app-loader"><Loader></Loader></div>; // Or your loading component
   }
 
   return (
