@@ -810,6 +810,47 @@ app.post("/update_vendor_status", (req, res) => {
 });
 
 // API Route for getting all pending service requests
+// app.get("/pending-services", (req, res) => {
+//   console.log("'/pending-services' API Called");
+  
+//   const query = `
+//       SELECT 
+//           sr.service_id,
+//           sr.service_description,
+//           u.username,
+//           sr.location,
+//           sr.created_at,
+//           sr.status
+//       FROM service_request sr
+//       JOIN users u ON sr.userID = u.userID
+//       WHERE sr.status = 0
+//       ORDER BY sr.created_at DESC
+//   `;
+
+//   db.query(query, (error, results) => {
+//       if (error) {
+//           console.error("Database Error:", error);
+//           return res.status(500).json({
+//               success: false,
+//               message: "Internal server error"
+//           });
+//       }
+
+//       if (results.length === 0) {
+//           return res.status(404).json({
+//               success: false,
+//               message: "No pending service requests found"
+//           });
+//       }
+
+//       return res.status(200).json({
+//           success: true,
+//           count: results.length,
+//           data: results
+//       });
+//   });
+// });
+
 app.get("/pending-services", (req, res) => {
   console.log("'/pending-services' API Called");
   
@@ -825,6 +866,7 @@ app.get("/pending-services", (req, res) => {
       JOIN users u ON sr.userID = u.userID
       WHERE sr.status = 0
       ORDER BY sr.created_at DESC
+      LIMIT 5
   `;
 
   db.query(query, (error, results) => {
