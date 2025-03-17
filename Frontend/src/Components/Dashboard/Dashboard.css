@@ -151,6 +151,32 @@
   color: #333;
   padding: 1rem;
   border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-link {
+  font-size: 14px;
+  color: #2196F3;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.header-link:hover {
+  color: #1976D2;
+  transform: translateX(2px);
+}
+
+.header-link span {
+  transition: transform 0.2s ease;
+}
+
+.header-link:hover span {
+  transform: translateX(2px);
 }
 
 .dashboard-table {

@@ -334,7 +334,12 @@ const Dashboard = () => {
       <div className="tables-section">
         {/* Pending Services Table */}
         <div className="table-container">
-          <h4 className="table-title text-xl font-semibold">Pending Services</h4>
+          <h4 className="table-title text-xl font-semibold">
+            Pending Services
+            <Link to="/total_request" className="header-link">
+              View All <span>&rarr;</span>
+            </Link>
+          </h4>
           
           {isTableLoading ? (
             <div className="table-loading">
@@ -390,7 +395,12 @@ const Dashboard = () => {
 
         {/* Second Table */}
         <div className="table-container">
-          <h4 className="table-title text-xl font-semibold">Vendors Information</h4>
+          <h4 className="table-title text-xl font-semibold">
+            Vendors Information
+            <Link to="/vendor_list" className="header-link">
+              View All <span>&rarr;</span>
+            </Link>
+          </h4>
           {isVendorsLoading ? (
             <div className="table-loading">
               <Loader />
