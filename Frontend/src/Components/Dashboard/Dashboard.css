@@ -158,18 +158,30 @@
 
 .header-link {
   font-size: 14px;
-  color: #2196F3;
   text-decoration: none;
   display: flex;
   align-items: center;
   gap: 4px;
-  transition: all 0.2s ease;
+  transition: background-color 0.3s ease-in-out, 
+              color 0.3s ease-in-out, 
+              border 0.3s ease-in-out, 
+              transform 0.3s ease-in-out;
+  background-color: #2196F3;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-weight: 500;
+  margin-left: 10px;
+  color: white;
+  cursor: pointer;
 }
 
 .header-link:hover {
   color: #1976D2;
-  transform: translateX(2px);
+  background-color: transparent;
+  border: 1px solid #2196F3;
+  transform: translateX(4px);
 }
+
 
 .header-link span {
   transition: transform 0.2s ease;
