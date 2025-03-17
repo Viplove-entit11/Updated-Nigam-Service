@@ -3,16 +3,22 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin: 30px;
-  height: 100%;
-  overflow-y: auto;
+  min-height: 200px; /* Minimum height */
+  height: auto; /* Allow height to grow with content */
   background: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.table-responsive {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  border-radius: 4px;
 }
 
 /* Table Styles */
 .table {
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   background-color: transparent;
   border-collapse: separate;
   border-spacing: 0;
@@ -186,16 +192,20 @@
     padding: 15px;
   }
   
-  .table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-    height: 600px;
+  .table-responsive {
+    max-height: calc(100vh - 250px); /* Adjust based on your layout */
+    overflow-y: auto;
   }
   
-  .table thead th,
-  .table tbody td {
-    padding: 12px;
+  .table {
+    margin-bottom: 0;
+  }
+  
+  .table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 1;
   }
 }
 

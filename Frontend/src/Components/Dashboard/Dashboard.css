@@ -329,13 +329,13 @@
 }
 
 /* Align charges to right and add currency formatting */
-.dashboard-table td:nth-child(3) {
-  text-align: right;
+.table-container:nth-child(2) .dashboard-table td:nth-child(3) {
+  text-align: left;
   font-family: monospace;
   font-weight: 500;
 }
 
-/* Center align the status column */
-.dashboard-table td:nth-child(5) {
-  /* text-align: center; */
+/* For the first table (pending services), keep contact left-aligned */
+.table-container:first-child .dashboard-table td:nth-child(3) {
+  text-align: left;
 }

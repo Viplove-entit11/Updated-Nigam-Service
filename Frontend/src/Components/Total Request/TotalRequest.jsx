@@ -67,7 +67,9 @@ const TotalRequest = () => {
   // Fetch all vendor names
   const fetchAllVendorNames = async () => {
     try {
-      const response = await fetch("http://localhost:8081/fetch_vendors_name");
+      const response = await fetch(`${
+          import.meta.env.VITE_API_URL
+        }fetch_vendors_name`);
       if (!response.ok) throw new Error("Failed to fetch vendors.");
 
       const data = await response.json();
@@ -101,7 +103,9 @@ const TotalRequest = () => {
       }
 
       const response = await fetch(
-        "http://localhost:8081/service_status_update",
+        `${
+          import.meta.env.VITE_API_URL
+        }service_status_update`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -174,7 +178,9 @@ const TotalRequest = () => {
       }
 
       const response = await fetch(
-        "http://localhost:8081/update-complete-status",
+        `${
+          import.meta.env.VITE_API_URL
+        }update-complete-status`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -275,7 +281,18 @@ const TotalRequest = () => {
                       </div>
                     )}
                   </td>
-                  <td>{request.location || "N/A"}</td>
+                  {/* google map link added here */}
+                  <td>
+                <a 
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        `${request.street_address}, ${request.city}, ${request.state}, ${request.country}, ${request.pincode}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    View Location
+                </a>
+            </td>
                   <td>
                     <span
                       className={`request_status ${

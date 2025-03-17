@@ -387,29 +387,58 @@ app.post("/register_vendor", (request, response) => {
 
 // api for service_request
 app.post("/service-request", (req, res) => {
-    console.log("'/service-request' API Called");
+  console.log("'/service-request' API Called");
 
-  const { userId, description, location } = req.body;
+  // Extract data from request body
+  const {
+      userId,
+      description,
+      street_address,
+      city,
+      state,
+      country,
+      pincode
+  } = req.body;
 
   // Validate the incoming data
-  if (!userId || !description || !location) {
-    return res.status(400).json({ message: "All fields are required" });
+  if (
+      !userId || 
+      !description || 
+      !street_address || 
+      !city || 
+      !state || 
+      !country || 
+      !pincode
+  ) {
+      return res.status(400).json({ message: "All fields are required" });
   }
 
-  // Insert the data into the service_request table
-  const query =
-    "INSERT INTO service_request (userId, service_description, location) VALUES (?, ?, ?)";
-  db.query(query, [userId, description, location], (error, results) => {
-    if (error) {
-      return res.status(500).json({ message: "Database error", error });
-    }
-    res
-      .status(201)
-      .json({
-        message: "Service request created",
-        requestId: results.insertId,
-      });
-  });
+  // Insert the data into the `service_request` table
+  const query = `
+      INSERT INTO service_request 
+          (userId, service_description, street_address, city, state, country, pincode) 
+      VALUES 
+          (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+      query,
+      [userId, description, street_address, city, state, country, pincode],
+      (error, results) => {
+          if (error) {
+              console.error("Database Error:", error);
+              return res.status(500).json({
+                  message: "Database error",
+                  error
+              });
+          }
+
+          return res.status(201).json({
+              message: "Service request created",
+              requestId: results.insertId
+          });
+      }
+  );
 });
 
 //   API for fetching all service requests
@@ -809,6 +838,49 @@ app.post("/update_vendor_status", (req, res) => {
     });
 });
 
+// app.get("/pending-services", (req, res) => {
+//   console.log("'/pending-services' API Called");
+  
+//   const query = `
+//       SELECT 
+//           sr.service_id,
+//           sr.service_description,
+//           u.username,
+//           sr.location,
+//           sr.created_at,
+//           sr.status
+//       FROM service_request sr
+//       JOIN users u ON sr.userID = u.userID
+//       WHERE sr.status = 0
+//       ORDER BY sr.created_at DESC
+//       LIMIT 5
+//   `;
+
+//   db.query(query, (error, results) => {
+//       if (error) {
+//           console.error("Database Error:", error);
+//           return res.status(500).json({
+//               success: false,
+//               message: "Internal server error"
+//           });
+//       }
+
+//       if (results.length === 0) {
+//           return res.status(404).json({
+//               success: false,
+//               message: "No pending service requests found"
+//           });
+//       }
+
+//       return res.status(200).json({
+//           success: true,
+//           count: results.length,
+//           data: results
+//       });
+//   });
+// });
+
+// pending services including contact number of user
 app.get("/pending-services", (req, res) => {
   console.log("'/pending-services' API Called");
   
@@ -817,6 +889,7 @@ app.get("/pending-services", (req, res) => {
           sr.service_id,
           sr.service_description,
           u.username,
+          u.contact, -- Added contact field
           sr.location,
           sr.created_at,
           sr.status
@@ -850,7 +923,6 @@ app.get("/pending-services", (req, res) => {
       });
   });
 });
-
 
 // APP LISTENING TO PORT 8081
 const PORT = process.env.PORT

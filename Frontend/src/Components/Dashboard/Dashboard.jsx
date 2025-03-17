@@ -262,6 +262,8 @@ const Dashboard = () => {
                 tick={{ fill: '#666', fontSize: 12 }}
                 axisLine={{ stroke: '#E0E0E0' }}
                 tickLine={{ stroke: '#E0E0E0' }}
+                tickFormatter={(value) => Math.round(value)}
+                allowDecimals={false}
               />
               <Tooltip 
                 contentStyle={{ 
@@ -269,6 +271,7 @@ const Dashboard = () => {
                   border: '1px solid #E0E0E0',
                   borderRadius: '4px'
                 }}
+                formatter={(value) => [Math.round(value), "Service Requests"]}
               />
               <Legend 
                 verticalAlign="top" 
@@ -347,10 +350,11 @@ const Dashboard = () => {
                 <thead>
                   <tr>
                     <th>Service ID</th>
-                    <th>Description</th>
                     <th>Username</th>
-                    <th>Location</th>
-                    <th>Status</th>
+                    <th>Contact</th>
+                    <th>Description</th>
+                    {/* <th>Location</th> */}
+                    {/* <th>Status</th> */}
                     <th>Created At</th>
                   </tr>
                 </thead>
@@ -365,14 +369,15 @@ const Dashboard = () => {
                     pendingServices.map((service) => (
                       <tr key={service.service_id}>
                         <td>{service.service_id}</td>
-                        <td>{service.service_description}</td>
                         <td>{service.username}</td>
-                        <td>{service.location}</td>
-                        <td>
+                        <td>{service.contact}</td>
+                        <td>{service.service_description}</td>
+                        {/* <td>{service.location}</td> */}
+                        {/* <td>
                           <span className={`dashboard-status-${service.status}`}>
                             {service.status === 0 ? 'Pending' : 'N/A'}
                           </span>
-                        </td>
+                        </td> */}
                         <td>{new Date(service.created_at).toLocaleDateString()}</td>
                       </tr>
                     ))
