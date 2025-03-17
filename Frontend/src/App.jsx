@@ -12,6 +12,7 @@ import MainPage from "./Pages/Main Page/MainPage";
 import { ToastContainer } from "react-toastify";
 import { useAuth } from "./Context/Context";
 import Loader from "./Components/Loader/Loader";
+import Payment from "./Pages/Payment/Payment";
 
 const App = () => {
   const { isAdminLoggedIn, isLoading } = useAuth();
@@ -27,6 +28,7 @@ const App = () => {
           isAdminLoggedIn ? <Navigate to="/dashboard" replace /> : <AdminLogin />
         } />
         <Route path="/*" element={<MainPage />} />
+        <Route path="/payment" element={<Payment />} />
       </Routes>
       <ToastContainer />
     </div>
