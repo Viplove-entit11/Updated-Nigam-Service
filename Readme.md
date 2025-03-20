@@ -8,3 +8,93 @@ For running this project on Localhost:
 2. In server.js add this     console.log(`Node Server Listening at: http://localhost:${PORT}`);
 3. In server.js add this   origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'],
 
+Project Directory Structure:
+```bash
+.
+├── .gitignore
+├── Payload_response.txt
+├── Readme.md
+├── Backend
+│   ├── .env
+│   ├── check-env.js
+│   ├── nodemon.json
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── server.js.old
+│   ├── logs
+│   └── src
+│       ├── server.js
+│       ├── config
+│       │   └── database.js
+│       ├── middleware
+│       └── routes
+│           ├── admin.routes.js
+│           ├── service.routes.js
+│           ├── user.routes.js
+│           └── vendor.routes.js
+│       └── utils
+└── Frontend
+    ├── .env
+    ├── .gitignore
+    ├── eslint.config.js
+    ├── index.html
+    ├── package-lock.json
+    ├── package.json
+    ├── README.md
+    ├── vite.config.js
+    ├── public
+    │   └── vite.svg
+    └── src
+        ├── App.css
+        ├── App.jsx
+        ├── index.css
+        ├── main.jsx
+        ├── assets
+        │   └── react.svg
+        ├── Components
+        │   ├── Admin form
+        │   │   ├── AdminForm.css
+        │   │   └── AdminForm.jsx
+        │   ├── Closed Request
+        │   │   ├── ClosedRequest.css
+        │   │   └── ClosedRequest.jsx
+        │   ├── Confirm Request
+        │   │   ├── ConfirmRequest.css
+        │   │   └── ConfirmRequest.jsx
+        │   ├── Dashboard
+        │   │   ├── Dashboard.css
+        │   │   └── Dashboard.jsx
+        │   ├── Loader
+        │   │   ├── Loader.css
+        │   │   └── Loader.jsx
+        │   ├── Navbar
+        │   │   ├── Navbar.css
+        │   │   └── Navbar.jsx
+        │   ├── ProtectedRoute
+        │   │   ├── ProtectedRoute.css
+        │   │   └── ProtectedRoute.jsx
+        │   ├── Sidebar
+        │   │   ├── Sidebar.css
+        │   │   └── Sidebar.jsx
+        │   ├── Total Request
+        │   │   ├── TotalRequest.css
+        │   │   └── TotalRequest.jsx
+        │   ├── Vendor Data
+        │   │   ├── VendorData.css
+        │   │   └── VendorData.jsx
+        │   └── Vendor Details
+        │       ├── VendorDetails.css
+        │       └── VendorDetails.jsx
+        ├── Context
+        │   └── Context.jsx
+        └── Pages
+            ├── Admin Login
+            │   ├── AdminLogin.css
+            │   └── AdminLogin.jsx
+            ├── Main Page
+            │   ├── MainPage.css
+            │   └── MainPage.jsx
+            └── Payment
+                ├── Payment.css
+                └── Payment.jsx
+```

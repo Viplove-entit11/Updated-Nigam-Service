@@ -145,10 +145,10 @@ const Dashboard = () => {
           credentials: 'include'
         });
         const data = await response.json();
-        console.log('Vendors API Response:', data);
+        // console.log('Vendors API Response:', data);
         
         if (data.success) {
-          console.log('Setting vendors data:', data.vendors);
+          // console.log('Setting vendors data:', data.vendors);
           setVendors(data.vendors || []);
         } else {
           console.error('API Error:', data.message);
