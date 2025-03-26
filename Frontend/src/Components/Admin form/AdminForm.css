@@ -113,6 +113,7 @@ body {
     background-color: white;
     padding: 0 5px;
     color: #4364F7;
+    border-radius: 5px;
 }
 
 /* Additional Links */
@@ -163,15 +164,18 @@ body {
 
 /* Responsive Design */
 @media (max-width: 600px) {
+   
     .admin-form {
-        width: 90%;
+        width: 100%;
         padding: 25px;
+        margin: 0px 10px;
     }
 }
 
 @media (max-width: 400px) {
     .admin-form {
-        width: 95%;
+        margin: 0 10px;
+        width: 100%;
         padding: 20px;
     }
 }

@@ -9,7 +9,7 @@ import VendorData from "../../Components/Vendor Data/VendorData";
 import VendorDetails from "../../Components/Vendor Details/VendorDetails";
 import ProtectedRoute from "../../Components/ProtectedRoute/ProtectedRoute";
 import "./MainPage.css";
-import NotFound from "../../Components/Not Found/NotFound";
+import NotFound from "../../Components/NotFound/NotFound";
 
 const MainPage = () => {
   return (

@@ -64,7 +64,7 @@ const ConfirmRequest = () => {
                   <th>Service ID</th>
                   <th>User Name</th>
                   <th>Description</th>
-                  <th>Location</th>
+                  {/* <th>Location</th> */}
                   <th>Status</th>
                   <th>Created At</th>
                 </tr>
@@ -76,7 +76,7 @@ const ConfirmRequest = () => {
                       <td>{request.service_id}</td>
                       <td>{request.username || 'N/A'}</td>
                       <td>{request.service_description}</td>
-                      <td>{request.location || "N/A"}</td>
+                      {/* <td>{request.location || "N/A"}</td> */}
                       <td>
                         <span className="request_status completed">
                           Completed
