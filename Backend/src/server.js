@@ -86,10 +86,7 @@ app.use((req, res, next) => {
 });
 
 // ✅ Routes with API prefix
-app.use("/api/admin", require("./routes/admin.routes"));
-app.use("/api/vendors", require("./routes/vendor.routes"));
-app.use("/api/services", require("./routes/service.routes"));
-app.use("/api/users", require("./routes/user.routes"));
+
 
 // ✅ Support for old routes (for backward compatibility)
 app.use("/", require("./routes/admin.routes"));
