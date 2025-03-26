@@ -1,0 +1,23 @@
+.admin-navbar{
+    /* border: 1px solid green; */
+    display: flex;
+    align-items: center;
+    padding: 20px 5px;
+}
+.admin-navbar .logo .mahasamund-logo{
+    width: 300px;
+    mix-blend-mode: multiply;
+    /* border: 1px solid; */
+}
+.title-text{
+    /* border: 1px solid red; */
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.title-text span{
+    font-size: 22px;
+    font-weight: bold;
+}

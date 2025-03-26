@@ -1,6 +1,6 @@
 import "./App.css";
 import "./index.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // importing context
@@ -18,17 +18,27 @@ const App = () => {
   const { isAdminLoggedIn, isLoading } = useAuth();
 
   if (isLoading) {
-    return <div className="app-loader"><Loader></Loader></div>; // Or your loading component
+    return (
+      <div className="app-loader">
+        <Loader></Loader>
+      </div>
+    ); // Or your loading component
   }
 
   return (
     <div className="main-app">
       <Routes>
-        <Route path="/admin-login" element={
-          isAdminLoggedIn ? <Navigate to="/dashboard" replace /> : <AdminLogin />
-        } />
+        <Route
+          path="/admin-login"
+          element={
+            isAdminLoggedIn ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <AdminLogin />
+            )
+          }
+        />
         <Route path="/*" element={<MainPage />} />
-        <Route path="/payment" element={<Payment />} />
       </Routes>
       <ToastContainer />
     </div>

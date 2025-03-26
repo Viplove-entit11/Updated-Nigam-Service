@@ -9,6 +9,7 @@ import VendorData from "../../Components/Vendor Data/VendorData";
 import VendorDetails from "../../Components/Vendor Details/VendorDetails";
 import ProtectedRoute from "../../Components/ProtectedRoute/ProtectedRoute";
 import "./MainPage.css";
+import NotFound from "../../Components/Not Found/NotFound";
 
 const MainPage = () => {
   return (
@@ -21,12 +22,14 @@ const MainPage = () => {
           <div className="main-content">
             <Navbar />
             <Routes>
+              <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/VendorRegistration" element={<VendorDetails />} />
               <Route path="/vendor_list" element={<VendorData />} />
               <Route path="/total_request" element={<TotalRequest />} />
               <Route path="/confirm_request" element={<ConfirmRequest />} />
               <Route path="/closed_request" element={<ClosedRequest />} />
+              <Route path="/*" element={<NotFound />} />
             </Routes>
           </div>
         </>
