@@ -12,7 +12,7 @@ import MainPage from "./Pages/Main Page/MainPage";
 import { ToastContainer } from "react-toastify";
 import { useAuth } from "./Context/Context";
 import Loader from "./Components/Loader/Loader";
-import Payment from "./Pages/Payment/Payment";
+// import Payment from "./Pages/Payment/Payment";
 
 const App = () => {
   const { isAdminLoggedIn, isLoading } = useAuth();
