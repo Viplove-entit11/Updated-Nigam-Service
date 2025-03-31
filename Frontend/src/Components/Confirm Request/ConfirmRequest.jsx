@@ -52,7 +52,7 @@ const ConfirmRequest = () => {
     <div className="total-request-div">
       <h6 className="mb-4">Confirmed Service Requests</h6>
       {confirmRequestLoading ? (
-        <div className="loader-container">
+        <div className="loader-container" style={{display:"flex",justifyContent:"center", height:"60vh", alignItems:"center"}}>
           <Loader />
         </div>
       ) : (

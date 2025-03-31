@@ -1,5 +1,5 @@
 import { useAuth } from "../../Context/Context";
-import "./vendorDetails.css";
+import "./VendorDetails.css";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
@@ -16,12 +16,18 @@ const VendorDetails = () => {
 
   // Local state for validation
   const [contactError, setContactError] = useState("");
+  const [nameError, setNameError] = useState("");
 
   const handleVendorRegistration = (event) => {
     event.preventDefault();
 
     if (vendorContact.length !== 10) {
       setContactError("Contact number must be exactly 10 digits.");
+      return;
+    }
+
+    if (!/^[a-zA-Z\s]+$/.test(vendorName)) {
+      setNameError("Vendor name should only contain letters.");
       return;
     }
 
@@ -56,6 +62,8 @@ const VendorDetails = () => {
         setVendorName("");
         setVendorContact("");
         setVendorCharges("");
+        setContactError("");
+        setNameError("");
       })
       .catch((error) => {
         // Error Handling
@@ -70,6 +78,18 @@ const VendorDetails = () => {
     // Allow only numbers and limit to 10 digits
     if (/^\d{0,10}$/.test(input)) {
       setVendorContact(input);
+    }
+  };
+
+  const handleNameChange = (event) => {
+    const input = event.target.value;
+
+    // Allow only alphabets and spaces
+    if (/^[a-zA-Z\s]*$/.test(input)) {
+      setVendorName(input);
+      setNameError(""); // Clear error when valid input
+    } else {
+      setNameError("Vendor name should only contain letters.");
     }
   };
 
@@ -97,9 +117,12 @@ const VendorDetails = () => {
             id="vendorName"
             placeholder="Enter Vendor Name"
             value={vendorName}
-            onChange={(event) => setVendorName(event.target.value)}
+            onChange={handleNameChange}
             required
           />
+          {nameError && (
+            <small className="text-danger">{nameError}</small>
+          )}
         </div>
 
         <div className="mb-3">

@@ -59,7 +59,7 @@ const ClosedRequest = () => {
       <h6 className="mb-4">Closed Service Requests</h6>
 
       {closedRequestLoading ? (
-        <div className="loader-container">
+        <div className="loader-container" style={{display:"flex",justifyContent:"center", height:"60vh", alignItems:"center"}}>
           <Loader />
         </div>
       ) : (
